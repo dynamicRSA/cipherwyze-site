@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The long transition window</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0B1729; --bg2:#132741;
+  --p1:#0FB3A5; --p2:#17A0C4; --p3:#2A87D0; --p4:#3D6DCB; --p5:#5153BE; --p6:#6742AC; --p7:#7A3496;
+  --alert:#F0523C; --alert-deep:#C7301C; --alert-soft:#FF9B8A; --amber:#F2B441;
+  --w70:rgba(255,255,255,.72); --w50:rgba(255,255,255,.5); --w38:rgba(255,255,255,.38); --line:rgba(255,255,255,.13);
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#E9EEF5;padding:24px;
+  font-family:"Archivo",system-ui,-apple-system,sans-serif;display:flex;justify-content:center}
+.holder{width:100%;max-width:1200px}
+.stage{
+  width:1200px;transform-origin:top left;
+  background:linear-gradient(160deg,var(--bg2) 0%,var(--bg) 62%);
+  border-radius:20px;padding:48px 56px 44px;color:#fff;position:relative;overflow:hidden;
+  box-shadow:0 40px 80px -44px rgba(11,23,41,.65);
+}
+.stage::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(90deg,rgba(255,255,255,.035) 0 1px,transparent 1px 60px);
+  -webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,.8),transparent 62%);
+  mask-image:linear-gradient(180deg,rgba(0,0,0,.8),transparent 62%)}
+.stage>*{position:relative}
+
+/* header */
+.head{display:flex;justify-content:space-between;align-items:flex-start;gap:44px;
+      padding-bottom:28px;border-bottom:1px solid var(--line)}
+.kicker{font-family:var(--mono);font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;
+        color:var(--w38);margin:0 0 13px}
+h1{margin:0;font-size:42px;font-weight:800;line-height:1.02;letter-spacing:-.03em;
+   font-variation-settings:'wdth' 116}
+.head p{margin:14px 0 0;font-size:14.5px;line-height:1.55;color:var(--w70);max-width:58ch}
+.head p b{color:#fff;font-weight:700}
+.counters{flex:none;display:flex;gap:26px;border-left:1px solid var(--line);padding-left:28px;text-align:right}
+.counter b{display:block;font-family:var(--mono);font-size:38px;font-weight:600;line-height:1;letter-spacing:-.02em}
+.counter b sup{font-size:16px;font-weight:500;vertical-align:super;opacity:.55;margin-left:2px}
+.counter span{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;
+              text-transform:uppercase;color:var(--w38);margin-top:9px}
+.counter--left b{color:var(--amber)}
+
+/* scenarios */
+.scenarios{margin-top:30px;display:flex;flex-direction:column;gap:32px}
+.sc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.sc-title{display:flex;align-items:baseline;gap:12px}
+.sc-title strong{font-size:17px;font-weight:700;letter-spacing:-.01em}
+.sc-title em{font-family:var(--mono);font-style:normal;font-size:11.5px;letter-spacing:.13em;
+             text-transform:uppercase;color:var(--w38)}
+.pills{display:flex;gap:8px;font-family:var(--mono);font-size:11.5px}
+.pill{background:rgba(255,255,255,.08);border:1px solid var(--line);border-radius:99px;
+      padding:5px 13px;color:var(--w70)}
+.pill b{color:#fff;font-weight:600}
+.pill--ok{background:rgba(242,180,65,.15);border-color:rgba(242,180,65,.4)}
+.pill--ok b{color:var(--amber)}
+.pill--bad{background:var(--alert-deep);border-color:var(--alert);color:#fff;letter-spacing:.12em;
+           text-transform:uppercase;font-weight:600;font-size:10.5px;padding:6px 13px}
+
+/* named callouts above the flow */
+.callouts{display:grid;height:66px;position:relative}
+.co{position:relative}
+.co i{position:absolute;left:50%;bottom:0;width:1px;background:currentColor;opacity:.55}
+.co--hi i{height:40px}
+.co--lo i{height:16px}
+.co span{position:absolute;left:50%;transform:translateX(-50%);white-space:nowrap;
+         font-size:11.5px;font-weight:700;letter-spacing:-.005em;line-height:1}
+.co span em{font-family:var(--mono);font-style:normal;font-weight:500;opacity:.6;margin-right:6px}
+.co--hi span{bottom:45px}
+.co--lo span{bottom:21px}
+.co--end span{left:auto;right:0;transform:none}
+
+/* bars */
+.bar{display:grid;height:64px;border-radius:9px;overflow:hidden;border:1px solid var(--line);
+     background:rgba(255,255,255,.045)}
+.seg{display:flex;align-items:center;justify-content:center;gap:7px;
+     border-right:1px solid rgba(11,23,41,.6);min-width:0}
+.seg:last-child{border-right:0}
+.seg svg{width:19px;height:19px;color:#fff;flex:none}
+.seg b{font-family:var(--mono);font-size:13px;font-weight:600;color:rgba(255,255,255,.95)}
+
+.hatch{display:flex;align-items:center;justify-content:flex-start;padding-left:18px;
+  background:repeating-linear-gradient(-45deg,rgba(255,255,255,.05) 0 6px,transparent 6px 13px);
+  border-right:1px dashed rgba(255,155,138,.6)}
+.hatch span{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;
+            color:var(--w38);white-space:nowrap}
+
+.durations{display:grid;margin-top:8px;font-family:var(--mono);font-size:11px;color:var(--w50)}
+.durations span{text-align:center;font-variant-numeric:tabular-nums}
+.durations span::before{content:"";display:block;width:1px;height:5px;background:var(--line);margin:0 auto 5px}
+
+.ruler{margin-top:9px;position:relative;height:17px}
+.ruler i.ticks{position:absolute;top:0;left:0;right:0;height:5px}
+.ruler i.mark{position:absolute;top:-2px;width:2px;height:9px;border-radius:1px}
+.ruler u{position:absolute;top:0;font-family:var(--mono);font-size:10.5px;color:var(--w38);
+         text-decoration:none;padding-top:9px;white-space:nowrap}
+.ruler u.start{left:0;color:var(--amber)}
+.ruler u.end{right:0}
+.ruler u.late{color:var(--alert-soft)}
+.ruler u.mid{color:var(--w50)}
+
+/* compressed row */
+.pack{display:grid}
+.pack .seg{flex-direction:column;gap:3px}
+.pack .seg b{font-size:10px;line-height:1;color:rgba(255,255,255,.92)}
+.pack .seg svg{width:13px;height:13px}
+.late-dur{display:grid;margin-top:8px}
+.late-dur .note{font-family:var(--mono);font-size:11px;color:var(--w38);padding-top:10px}
+.squeeze{position:relative;padding-top:10px}
+.squeeze::before{content:"";position:absolute;top:0;left:0;right:0;height:7px;
+  border:1px solid rgba(255,155,138,.55);border-bottom:0;border-radius:3px 3px 0 0}
+.squeeze span{display:block;text-align:center;font-family:var(--mono);font-size:11px;
+              color:var(--alert-soft);padding-top:5px}
+
+/* costs + footnote */
+.costs{margin-top:34px;background:rgba(240,82,60,.12);border:1px solid rgba(240,82,60,.32);
+  border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.costs .lbl{font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;
+            color:var(--alert-soft);flex:none}
+.costs ul{display:flex;gap:8px;list-style:none;margin:0;padding:0;flex-wrap:wrap}
+.costs li{font-size:13px;font-weight:600;color:rgba(255,255,255,.92);
+          background:rgba(255,255,255,.09);border-radius:99px;padding:6px 14px}
+
+.foot{margin:20px 0 0;display:flex;gap:12px;align-items:flex-start;
+      font-size:11.5px;line-height:1.5;color:var(--w38);max-width:104ch}
+.foot b{font-family:var(--mono);color:var(--amber);flex:none;font-weight:500}
+.foot strong{color:var(--w70);font-weight:600}
+</style>
+</head>
+<body>
+<div class="holder" id="holder">
+<div class="stage" id="stage">
+
+  <div class="head">
+    <div>
+      <p class="kicker">Post-quantum readiness / July 2026</p>
+      <h1>The long transition window</h1>
+      <p>Moving to quantum-safe cryptography takes seven phases of coordinated work across people, systems, vendors, customers and regulators. It was planned as a ten year programme. <b>Nine years remain at most</b>, and much of the guidance expects visible progress well before the end date.</p>
+    </div>
+    <div class="counters">
+      <div class="counter counter--left"><b>9</b><span>Years at most</span></div>
+      <div class="counter"><b>2035<sup>*</sup></b><span>Outer bound</span></div>
+    </div>
+  </div>
+
+  <div class="scenarios">
+
+    <div class="sc">
+      <div class="sc-head">
+        <div class="sc-title"><strong>Start in 2026</strong><em>The full remaining window</em></div>
+        <div class="pills">
+          <span class="pill">Time available <b>9 years</b></span>
+          <span class="pill">Required pace <b>1.1&times;</b></span>
+          <span class="pill pill--ok">Risk <b>Manageable</b></span>
+        </div>
+      </div>
+      <div class="callouts" id="callouts"></div>
+      <div class="bar" id="barNow"></div>
+      <div class="durations" id="durNow"></div>
+      <div class="ruler" id="rulerNow"></div>
+    </div>
+
+    <div class="sc">
+      <div class="sc-head">
+        <div class="sc-title"><strong>Start in 2032</strong><em>Six years of waiting first</em></div>
+        <div class="pills">
+          <span class="pill">Time available <b>3 years</b></span>
+          <span class="pill">Required pace <b>3.3&times;</b></span>
+          <span class="pill pill--bad">Risk critical</span>
+        </div>
+      </div>
+      <div class="bar" id="barLate">
+        <div class="hatch"><span>Six years waiting, no work started</span></div>
+        <div class="pack" id="packLate"></div>
+      </div>
+      <div class="late-dur" id="lateDur">
+        <div class="note">None of this time can be recovered later</div>
+        <div class="squeeze"><span>The same seven phases, in the same order, at a third of the time each</span></div>
+      </div>
+      <div class="ruler" id="rulerLate"></div>
+    </div>
+
+  </div>
+
+  <div class="costs">
+    <span class="lbl">What compression costs</span>
+    <ul>
+      <li>Project delays</li><li>Outages at cutover</li><li>Rushed changes</li>
+      <li>Higher cost</li><li>Customer disruption</li>
+    </ul>
+  </div>
+
+  <p class="foot"><b>*</b><span><strong>2035 is an outer bound, not a fixed date.</strong> Target dates differ by regulator, sector, jurisdiction and supplier, and several frameworks set interim checkpoints from 2028 onward, with high priority systems expected to move earlier. Treat the timeline above as an illustration of scale rather than a schedule. If your applicable date lands before 2035, every bar shown here gets shorter and the compression starts sooner.</span></p>
+
+</div>
+</div>
+
+<script>
+const ICONS={
+ search:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="6"/><path d="m20 20-4.3-4.3"/></svg>',
+ list:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>',
+ flask:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4A2 2 0 0 0 19 18l-5-9V3"/><path d="M7.5 15h9"/></svg>',
+ link:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M10 13a4 4 0 0 0 6 .5l2-2a4 4 0 0 0-5.7-5.7l-1.1 1.1"/><path d="M14 11a4 4 0 0 0-6-.5l-2 2A4 4 0 0 0 11.7 18l1.1-1.1"/></svg>',
+ gear:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5 5l2.1 2.1M16.9 16.9 19 19M19 5l-2.1 2.1M7.1 16.9 5 19"/></svg>',
+ doc:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h6"/><path d="M14 3l5 5v3"/><path d="M8 9h3M8 13h4"/><path d="M18 14c1.6.6 2.5 1 2.5 1v2.4c0 1.4-1 2.4-2.5 3.1-1.5-.7-2.5-1.7-2.5-3.1V15s.9-.4 2.5-1z"/></svg>',
+ chart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 20h16"/><path d="M7 20v-6M12 20V7M17 20v-9"/></svg>'
+};
+
+const PHASES=[
+ {n:'Inventory &amp; discovery',       w:1.5, c:'--p1', i:'search'},
+ {n:'Assessment &amp; prioritisation', w:1.0, c:'--p2', i:'list'},
+ {n:'Testing &amp; validation',        w:1.5, c:'--p3', i:'flask'},
+ {n:'Vendor &amp; ecosystem work',     w:2.0, c:'--p4', i:'link'},
+ {n:'Migration &amp; rollout',         w:2.5, c:'--p5', i:'gear'},
+ {n:'Evidence &amp; audit',            w:1.0, c:'--p6', i:'doc'},
+ {n:'Optimisation &amp; governance',   w:0.5, c:'--p7', i:'chart'}
+];
+
+const START=2026, END=2035, SPAN=END-START;
+const LATE=2032, WAIT=LATE-START, WORK=END-LATE;
+const INTERIM=2028;
+const TOTAL=PHASES.reduce((s,p)=>s+p.w,0);
+const FIT=SPAN/TOTAL;
+const yr=v=>v.toFixed(1).replace(/\.0$/,'')+' yr';
+const tint=c=>'color-mix(in oklab, var('+c+') 45%, white)';
+const pct=y=>((y-START)/SPAN*100);
+
+const cols=PHASES.map(p=>p.w+'fr').join(' ');
+const callouts=document.getElementById('callouts');
+const barNow=document.getElementById('barNow');
+const durNow=document.getElementById('durNow');
+const pack=document.getElementById('packLate');
+callouts.style.gridTemplateColumns=cols;
+barNow.style.gridTemplateColumns=cols;
+durNow.style.gridTemplateColumns=cols;
+pack.style.gridTemplateColumns=cols;
+document.getElementById('barLate').style.gridTemplateColumns=WAIT+'fr '+WORK+'fr';
+document.getElementById('lateDur').style.gridTemplateColumns=WAIT+'fr '+WORK+'fr';
+
+PHASES.forEach((p,i)=>{
+  const co=document.createElement('div');
+  co.className='co '+(i%2===0?'co--hi':'co--lo')+(i===PHASES.length-1?' co--end':'');
+  co.style.color=tint(p.c);
+  co.innerHTML='<span><em>'+String(i+1).padStart(2,'0')+'</em>'+p.n+'</span><i></i>';
+  callouts.appendChild(co);
+
+  const s=document.createElement('div');
+  s.className='seg';s.style.background='var('+p.c+')';
+  s.innerHTML='<b>'+(i+1)+'</b>'+ICONS[p.i];
+  barNow.appendChild(s);
+
+  const d=document.createElement('span');
+  d.textContent=yr(p.w*FIT);
+  durNow.appendChild(d);
+
+  const t=document.createElement('div');
+  t.className='seg';
+  t.style.background='color-mix(in oklab, var('+p.c+') 24%, var(--alert))';
+  t.innerHTML='<b>'+(i+1)+'</b>'+ICONS[p.i];
+  pack.appendChild(t);
+});
+
+const ticksBg='repeating-linear-gradient(90deg,var(--line) 0 1px,transparent 1px '+(100/SPAN)+'%)';
+function buildRuler(el,extra){
+  el.innerHTML='<i class="ticks" style="background:'+ticksBg+'"></i>'+
+    '<i class="mark" style="left:0;background:var(--amber)"></i>'+
+    '<i class="mark" style="left:'+pct(INTERIM)+'%;background:rgba(255,255,255,.4)"></i>'+
+    '<u class="start">'+START+' now</u>'+
+    '<u class="mid" style="left:'+pct(INTERIM)+'%;transform:translateX(-50%)">'+INTERIM+' interim checkpoints</u>'+
+    '<u class="end">'+END+' outer bound</u>'+(extra||'');
+}
+buildRuler(document.getElementById('rulerNow'));
+buildRuler(document.getElementById('rulerLate'),
+  '<i class="mark" style="left:'+pct(LATE)+'%;background:var(--alert)"></i>'+
+  '<u class="late" style="left:'+pct(LATE)+'%;transform:translateX(-50%)">'+LATE+' start</u>');
+
+const holder=document.getElementById('holder'),stage=document.getElementById('stage');
+function fit(){const s=Math.min(1,holder.clientWidth/1200);
+  stage.style.transform='scale('+s+')';holder.style.height=(stage.offsetHeight*s)+'px';}
+addEventListener('resize',fit);fit();
+</script>
+</body>
+</html>

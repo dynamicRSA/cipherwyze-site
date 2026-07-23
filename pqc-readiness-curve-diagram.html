@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The post-quantum readiness curve — where are you?</title>
+<meta name="description" content="Nine stages of organisational response to post-quantum cryptography. Find your stage, see what it costs to wait.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0B1520;
+  --slate:#5A6C7E;
+  --paper:#F2F4F6;
+  --white:#fff;
+  --hair:rgba(11,21,32,.10);
+  --p1:#2F6FB5;
+  --p2:#B57814;
+  --p3:#BE4326;
+  --p4:#12765F;
+  --display:"Space Grotesk",-apple-system,BlinkMacSystemFont,sans-serif;
+  --body:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  --inset:12px;
+  --band:180px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+:focus-visible{outline:2px solid var(--p1);outline-offset:3px}
+
+.figure{max-width:1460px;margin:0 auto;padding:44px 26px 64px}
+
+/* ---------- hero ---------- */
+.hero{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:40px;align-items:end;margin:0 0 30px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--slate);margin:0 0 14px}
+.eyebrow s{width:26px;height:1px;background:currentColor;text-decoration:none}
+.hero h1{font-family:var(--display);font-weight:700;font-size:clamp(30px,4.4vw,54px);line-height:1.02;letter-spacing:-.028em;margin:0 0 14px;text-wrap:balance}
+.hero h1 mark{background:none;color:var(--p3)}
+.hero .lede{margin:0;color:var(--slate);font-size:17px;line-height:1.6;max-width:52ch}
+.pitch{border-left:3px solid var(--p3);padding:2px 0 2px 18px}
+.pitch p{margin:0 0 8px;font-family:var(--display);font-weight:600;font-size:19px;line-height:1.3;letter-spacing:-.012em}
+.pitch small{display:block;font-size:13px;line-height:1.55;color:var(--slate)}
+
+/* ---------- picker ---------- */
+.picker{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 18px;padding:14px 16px;background:var(--white);border:1px solid var(--hair);border-radius:3px}
+.picker .q{font-family:var(--display);font-weight:600;font-size:14px;margin-right:4px}
+.chip{font-family:var(--mono);font-size:12px;letter-spacing:.06em;padding:7px 12px;border:1px solid var(--hair);background:transparent;border-radius:2px;cursor:pointer;color:var(--slate);transition:all .18s ease}
+.chip:hover{border-color:currentColor;color:var(--ink)}
+.chip.on{background:var(--ink);border-color:var(--ink);color:#fff}
+
+/* ---------- board ---------- */
+.board{display:grid;grid-template-columns:52px repeat(9,minmax(0,1fr));grid-template-rows:auto var(--band) auto auto;grid-auto-columns:0}
+.zone{grid-row:1/5;z-index:0;background:currentColor;opacity:.07;transition:opacity .3s ease}
+.edge{grid-row:1/5;z-index:3;border-left:1px solid var(--hair);pointer-events:none}
+
+.gutter{grid-column:1/2;grid-row:2;z-index:1;position:relative}
+.gutter b{position:absolute;right:9px;font-family:var(--mono);font-weight:400;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--slate)}
+.gutter b.hi{top:2px}
+.gutter b.lo{bottom:2px}
+.gutter u{position:absolute;left:2px;top:50%;transform:translateY(-50%) rotate(180deg);writing-mode:vertical-rl;text-decoration:none;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--slate);white-space:nowrap}
+.gutter i{position:absolute;right:0;top:20px;bottom:20px;width:1px;background:var(--hair)}
+
+.band{grid-column:2/-1;grid-row:2;z-index:1;position:relative}
+.band svg.plot{position:absolute;inset:0;width:100%;height:100%;display:block;transition:clip-path 1.6s cubic-bezier(.2,.7,.3,1)}
+.band svg.plot.pre{clip-path:inset(0 100% 0 0)}
+.node{position:absolute;transform:translate(-50%,-50%);width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;font-weight:500;background:currentColor;cursor:pointer;border:0;padding:0;transition:opacity .4s ease,box-shadow .25s ease,width .25s ease,height .25s ease}
+.node em{font-style:normal;color:#fff}
+.node.on{width:40px;height:40px;box-shadow:0 0 0 5px rgba(255,255,255,.85),0 0 0 6px currentColor}
+.peak{position:absolute;transform:translate(-50%,-50%);width:32px;height:32px;border-radius:50%;border:1px solid var(--p3);pointer-events:none;opacity:0}
+.peak.go{animation:ping 2.6s ease-out infinite}
+@keyframes ping{0%{opacity:.7;transform:translate(-50%,-50%) scale(1)}70%{opacity:0;transform:translate(-50%,-50%) scale(2.3)}100%{opacity:0}}
+.peaklabel{position:absolute;left:72.222%;bottom:6px;transform:translateX(-50%);font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--p3);white-space:nowrap}
+
+.phdr{grid-row:1;z-index:1;position:relative;padding:20px var(--inset)}
+.phdr .rng{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;display:block;margin:0 0 7px}
+.phdr h2{font-family:var(--display);font-weight:600;font-size:16px;letter-spacing:-.01em;margin:0 0 5px;line-height:1.22;text-wrap:balance}
+.phdr p{margin:0;font-size:12.5px;line-height:1.5;color:var(--slate);max-width:38ch}
+
+.col{grid-row:3;z-index:1;position:relative;padding:20px var(--inset) 24px;cursor:pointer;background:transparent;border:0;text-align:left;font:inherit;transition:background .22s ease,opacity .22s ease}
+.col:hover{background:rgba(255,255,255,.55)}
+.col.on{background:var(--white);box-shadow:0 1px 0 rgba(11,21,32,.06)}
+.board.picked .col:not(.on){opacity:.42}
+.col .n{display:none}
+.col h3{font-family:var(--display);font-weight:600;font-size:13.5px;line-height:1.28;letter-spacing:-.004em;color:var(--ink);margin:0 0 12px;hyphens:auto;overflow-wrap:break-word}
+.col .ico{display:block;width:28px;height:28px;margin:0 0 12px}
+.col .ico svg{width:100%;height:100%;display:block;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.col p{margin:0;font-size:12.5px;line-height:1.55;color:var(--slate);hyphens:auto;overflow-wrap:break-word}
+
+.banner{grid-row:4;z-index:1;position:relative;margin:0;padding:13px var(--inset) 14px;background:currentColor;font-family:var(--display);font-weight:600;font-size:12.5px;line-height:1.42;border-top:1px solid rgba(255,255,255,.3)}
+.banner em{font-style:normal;color:#fff}
+
+/* ---------- verdict ---------- */
+.verdict{margin:22px 0 0;background:var(--ink);color:#fff;border-radius:3px;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr) auto;gap:28px;align-items:center;padding:24px 26px;opacity:0;transform:translateY(8px);transition:opacity .35s ease,transform .35s ease}
+.verdict.show{opacity:1;transform:none}
+.verdict .vtag{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;display:block;margin:0 0 8px}
+.verdict h3{font-family:var(--display);font-weight:600;font-size:20px;line-height:1.25;letter-spacing:-.014em;margin:0 0 6px;text-wrap:balance}
+.verdict p{margin:0;font-size:14px;line-height:1.6;color:rgba(255,255,255,.7)}
+.meters{display:grid;gap:9px}
+.meter{display:grid;grid-template-columns:112px 1fr;align-items:center;gap:10px}
+.meter span{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.55)}
+.meter i{display:flex;gap:4px}
+.meter i b{width:16px;height:4px;border-radius:2px;background:rgba(255,255,255,.18);transition:background .3s ease}
+.meter i b.f{background:currentColor}
+.cta{display:inline-flex;align-items:center;gap:9px;background:#fff;color:var(--ink);font-family:var(--display);font-weight:600;font-size:14px;padding:14px 20px;border-radius:2px;text-decoration:none;white-space:nowrap;transition:transform .18s ease}
+.cta:hover{transform:translateY(-2px)}
+.cta s{text-decoration:none}
+
+.caption{max-width:740px;margin:24px 0 0;font-size:13.5px;line-height:1.65;color:var(--slate)}
+
+@media(max-width:1180px){
+  .hero{grid-template-columns:1fr;gap:22px;align-items:start}
+  .verdict{grid-template-columns:1fr;gap:20px}
+}
+@media(max-width:1100px){
+  :root{--inset:10px}
+  .col h3{font-size:13px}
+  .col p,.phdr p{font-size:12px}
+}
+@media(max-width:900px){
+  .figure{padding:32px 18px 44px}
+  .board{grid-template-columns:1fr}
+  .board > *{grid-column:1/-1!important;grid-row:auto!important}
+  .zone,.edge,.gutter{display:none}
+  .band{height:170px;margin:0 0 20px}
+  .node{width:26px;height:26px;font-size:11px}
+  .node.on{width:32px;height:32px}
+  .phdr{padding:18px 0 10px}
+  .phdr h2{font-size:19px}
+  .phdr p{font-size:14px}
+  .col{padding:14px 0 14px 14px;border-left:3px solid currentColor;display:grid;grid-template-columns:28px 1fr;column-gap:12px;align-items:start}
+  .col .n{display:block;grid-column:2;font-family:var(--mono);font-size:10px;letter-spacing:.12em;margin:0 0 4px}
+  .col .ico{grid-column:1;grid-row:1/3;margin:2px 0 0}
+  .col h3{grid-column:2;font-size:16px;margin:0 0 5px}
+  .col p{grid-column:2;font-size:14px}
+  .banner{margin:10px 0 4px;padding:14px;font-size:15px;border-radius:2px}
+  .cta{width:100%;justify-content:center}
+}
+@media (prefers-reduced-motion:reduce){
+  .band svg.plot,.band svg.plot.pre{clip-path:none!important;transition:none!important}
+  .node,.verdict{opacity:1!important;transform:none!important;transition:none!important}
+  .peak.go{animation:none}
+  *{scroll-behavior:auto}
+}
+@media print{.board{page-break-inside:avoid}.band svg.plot.pre{clip-path:none}.picker,.verdict{display:none}}
+</style>
+</head>
+<body>
+
+<figure class="figure">
+
+  <div class="hero">
+    <div>
+      <p class="eyebrow"><s></s>Post-quantum cryptography</p>
+      <h1>Everyone reaches stage 7. <mark>Only the timing is yours to choose.</mark></h1>
+      <p class="lede">Nine stages of organisational response to the quantum threat, tracking perceived urgency and industry attention over time. The work is the same at every stage. What changes is what it costs you.</p>
+    </div>
+    <div class="pitch">
+      <p>The cheapest year to start was last year. The second cheapest is this one.</p>
+      <small>Discovery alone routinely takes longer than boards expect — and it is the one task that cannot be compressed by spending more once the market is buying the same scarce skills at once.</small>
+    </div>
+  </div>
+
+  <div class="picker">
+    <span class="q">Where are you on the curve?</span>
+    <button class="chip" data-i="0" type="button">1</button>
+    <button class="chip" data-i="1" type="button">2</button>
+    <button class="chip" data-i="2" type="button">3</button>
+    <button class="chip" data-i="3" type="button">4</button>
+    <button class="chip" data-i="4" type="button">5</button>
+    <button class="chip" data-i="5" type="button">6</button>
+    <button class="chip" data-i="6" type="button">7</button>
+    <button class="chip" data-i="7" type="button">8</button>
+    <button class="chip" data-i="8" type="button">9</button>
+  </div>
+
+  <div class="board" id="board">
+
+    <div class="zone" style="grid-column:2/6;color:var(--p1)"></div>
+    <div class="zone" style="grid-column:6/8;color:var(--p2)"></div>
+    <div class="zone" style="grid-column:8/9;color:var(--p3)"></div>
+    <div class="zone" style="grid-column:9/11;color:var(--p4)"></div>
+    <div class="edge" style="grid-column:6/8"></div>
+    <div class="edge" style="grid-column:8/9"></div>
+    <div class="edge" style="grid-column:9/11"></div>
+
+    <div class="gutter">
+      <b class="hi">High</b><u>Perceived urgency</u><i></i><b class="lo">Low</b>
+    </div>
+
+    <div class="band">
+      <svg class="plot" viewBox="0 0 900 180" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id="fade" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#2F6FB5" stop-opacity=".16"/>
+            <stop offset="52%" stop-color="#B57814" stop-opacity=".2"/>
+            <stop offset="72%" stop-color="#BE4326" stop-opacity=".26"/>
+            <stop offset="100%" stop-color="#12765F" stop-opacity=".16"/>
+          </linearGradient>
+        </defs>
+        <path fill="url(#fade)" stroke="none"
+          d="M50,152 C66.7,151 116.7,149 150,146 C183.3,143 216.7,137 250,136 C283.3,135 316.7,145 350,141 C383.3,137 416.7,120 450,110 C483.3,100 516.7,89 550,79 C583.3,69 616.7,41 650,42 C683.3,43 716.7,76 750,85 C783.3,94 816.7,100 850,103 L850,180 L50,180 Z"/>
+        <path stroke="#BE4326" stroke-opacity=".45" stroke-width="1" stroke-dasharray="3 4" vector-effect="non-scaling-stroke" d="M650,42 L650,180"/>
+        <path fill="none" stroke="#0B1520" stroke-opacity=".5" stroke-width="2.5" stroke-linecap="round" vector-effect="non-scaling-stroke"
+          d="M50,152 C66.7,151 116.7,149 150,146 C183.3,143 216.7,137 250,136 C283.3,135 316.7,145 350,141 C383.3,137 416.7,120 450,110 C483.3,100 516.7,89 550,79 C583.3,69 616.7,41 650,42 C683.3,43 716.7,76 750,85 C783.3,94 816.7,100 850,103"/>
+      </svg>
+      <span class="peak" id="peak" style="left:72.222%;top:42px"></span>
+      <span class="peaklabel">Peak cost</span>
+      <button class="node" data-i="0" type="button" aria-label="Stage 1" style="left:5.556%;top:152px;color:var(--p1)"><em>1</em></button>
+      <button class="node" data-i="1" type="button" aria-label="Stage 2" style="left:16.667%;top:146px;color:var(--p1)"><em>2</em></button>
+      <button class="node" data-i="2" type="button" aria-label="Stage 3" style="left:27.778%;top:136px;color:var(--p1)"><em>3</em></button>
+      <button class="node" data-i="3" type="button" aria-label="Stage 4" style="left:38.889%;top:141px;color:var(--p1)"><em>4</em></button>
+      <button class="node" data-i="4" type="button" aria-label="Stage 5" style="left:50%;top:110px;color:var(--p2)"><em>5</em></button>
+      <button class="node" data-i="5" type="button" aria-label="Stage 6" style="left:61.111%;top:79px;color:var(--p2)"><em>6</em></button>
+      <button class="node" data-i="6" type="button" aria-label="Stage 7" style="left:72.222%;top:42px;color:var(--p3)"><em>7</em></button>
+      <button class="node" data-i="7" type="button" aria-label="Stage 8" style="left:83.333%;top:85px;color:var(--p4)"><em>8</em></button>
+      <button class="node" data-i="8" type="button" aria-label="Stage 9" style="left:94.444%;top:103px;color:var(--p4)"><em>9</em></button>
+    </div>
+
+    <div class="phdr" style="grid-column:2/6">
+      <span class="rng" style="color:var(--p1)">Stages 1–4 · Pre-hype / denial</span>
+      <h2>Risk exists, but urgency is low</h2>
+      <p>Specialists understand the problem. Nobody else is funding it.</p>
+    </div>
+    <button class="col" data-i="0" type="button" style="grid-column:2/3;color:var(--p1)">
+      <span class="n">Stage 1</span>
+      <h3>Cryptographic specialist awareness</h3>
+      <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4 21 21"/></svg></span>
+      <p>Researchers and crypto specialists understand the future risk.</p>
+    </button>
+    <button class="col" data-i="1" type="button" style="grid-column:3/4;color:var(--p1)">
+      <span class="n">Stage 2</span>
+      <h3>Standards acceleration</h3>
+      <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4H6a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1h-3"/><rect x="9" y="2.5" width="6" height="3.5" rx="1"/><path d="M8.5 12.5l2 2 4-4"/></svg></span>
+      <p>NIST, ETSI and standards bodies publish roadmaps and guidance.</p>
+    </button>
+    <button class="col" data-i="2" type="button" style="grid-column:4/5;color:var(--p1)">
+      <span class="n">Stage 3</span>
+      <h3>Executive disbelief and de-prioritisation</h3>
+      <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="4.5" r="2.5"/><path d="M12 8v7"/><path d="M12 9.5 5 12M12 9.5l7 2.5"/><path d="M9 21l3-6 3 6"/></svg></span>
+      <p>“Not our problem yet.” Long timelines create a false sense of safety.</p>
+    </button>
+    <button class="col" data-i="3" type="button" style="grid-column:5/6;color:var(--p1)">
+      <span class="n">Stage 4</span>
+      <h3>AI distraction suppressing urgency</h3>
+      <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12.5a8 8 0 1 0-13.5 5.8V21"/><path d="M6.5 18.3H16v-2.6h3.2"/><circle cx="10" cy="9.5" r="1.4"/><circle cx="15.5" cy="12" r="1.4"/><path d="M11.3 10.3 14.2 11.6"/></svg></span>
+      <p>AI dominates boardroom attention and investment.</p>
+    </button>
+    <p class="banner" style="grid-column:2/6;color:var(--p1)"><em>Low urgency. Low prioritisation. High future risk.</em></p>
+
+    <div class="phdr" style="grid-column:6/8">
+      <span class="rng" style="color:var(--p2)">Stages 5–6 · Regulatory awakening</span>
+      <h2>Signals turn into mandates</h2>
+      <p>Requirements acquire dates, and the first honest audit is unwelcome.</p>
+    </div>
+    <button class="col" data-i="4" type="button" style="grid-column:6/7;color:var(--p2)">
+      <span class="n">Stage 5</span>
+      <h3>Regulatory acceleration</h3>
+      <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9.5 12 4l9 5.5"/><path d="M5 9.5V17M9.7 9.5V17M14.3 9.5V17M19 9.5V17"/><path d="M3 20h18"/></svg></span>
+      <p>Regulators, governments and frameworks begin issuing requirements and expectations.</p>
+    </button>
+    <button class="col" data-i="5" type="button" style="grid-column:7/8;color:var(--p2)">
+      <span class="n">Stage 6</span>
+      <h3>Inventory shock</h3>
+      <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4 21 21"/><path d="M10.5 7.3v3.6"/><path d="M10.5 13.6v.1"/></svg></span>
+      <p>Organisations realise they don’t know what crypto they have, where it is, or who owns it.</p>
+    </button>
+    <p class="banner" style="grid-column:6/8;color:var(--p2)"><em>Awareness becomes unavoidable. Action is no longer optional.</em></p>
+
+    <div class="phdr" style="grid-column:8/9">
+      <span class="rng" style="color:var(--p3)">Stage 7 · Reckoning</span>
+      <h2>The market reaches a tipping point</h2>
+      <p>Everyone moves at once.</p>
+    </div>
+    <button class="col" data-i="6" type="button" style="grid-column:8/9;color:var(--p3)">
+      <span class="n">Stage 7</span>
+      <h3>Migration panic</h3>
+      <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 15a5 5 0 0 1 10 0z"/><path d="M4.5 18h15"/><path d="M12 5.5V3M6.2 7.4 4.6 5.8M17.8 7.4l1.6-1.6"/></svg></span>
+      <p>Sudden surge in activity, budgets and urgency. Capacity and skills become constrained.</p>
+    </button>
+    <p class="banner" style="grid-column:8/9;color:var(--p3)"><em>The scramble. Cost, risk and disruption peak.</em></p>
+
+    <div class="phdr" style="grid-column:9/11">
+      <span class="rng" style="color:var(--p4)">Stages 8–9 · Operational maturity</span>
+      <h2>Crypto agility becomes the norm</h2>
+      <p>Owned, funded, governed and continuously exercised.</p>
+    </div>
+    <button class="col" data-i="7" type="button" style="grid-column:9/10;color:var(--p4)">
+      <span class="n">Stage 8</span>
+      <h3>Governance and programme normalisation</h3>
+      <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4H6a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1h-3"/><rect x="9" y="2.5" width="6" height="3.5" rx="1"/><path d="M8.3 11.2l1.4 1.4 2.6-2.6"/><path d="M8.3 15.8l1.4 1.4 2.6-2.6"/><path d="M14.5 11h2M14.5 16h2"/></svg></span>
+      <p>Structured programmes, roadmaps, ownership models and governance become standard.</p>
+    </button>
+    <button class="col" data-i="8" type="button" style="grid-column:10/11;color:var(--p4)">
+      <span class="n">Stage 9</span>
+      <h3>Crypto agility maturity</h3>
+      <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 2.6v6c0 4.3-2.9 7.7-7 9.4-4.1-1.7-7-5.1-7-9.4v-6z"/><path d="M8.8 11.8 11.2 14.2 15.6 9.8"/></svg></span>
+      <p>Continuous inventory, crypto agility and algorithm agility become embedded business capability.</p>
+    </button>
+    <p class="banner" style="grid-column:9/11;color:var(--p4)"><em>Crypto agility is plumbing. Not a project, a capability.</em></p>
+
+  </div>
+
+  <div class="verdict" id="verdict" role="status" aria-live="polite">
+    <div>
+      <span class="vtag" id="v-tag">Stage 1 · Pre-hype / denial</span>
+      <h3 id="v-head">You are ahead of the market</h3>
+      <p id="v-body">Pick a stage above to see what it costs to stay there.</p>
+    </div>
+    <div class="meters" id="v-meters">
+      <div class="meter" style="color:var(--p3)"><span>Cost to act</span><i data-m="cost"><b></b><b></b><b></b><b></b><b></b></i></div>
+      <div class="meter" style="color:var(--p2)"><span>Freedom of choice</span><i data-m="free"><b></b><b></b><b></b><b></b><b></b></i></div>
+      <div class="meter" style="color:var(--p4)"><span>Time available</span><i data-m="time"><b></b><b></b><b></b><b></b><b></b></i></div>
+    </div>
+    <a class="cta" id="v-cta" href="contact.html" target="_parent">Book a readiness review <s>→</s></a>
+  </div>
+
+  <figcaption class="caption">Perceived urgency and industry attention rise slowly through denial, climb sharply once regulation lands and inventory gaps surface, peak during migration, and settle into a sustained operational baseline.</figcaption>
+
+</figure>
+
+<script>
+(function(){
+  var PH=["Pre-hype / denial","Pre-hype / denial","Pre-hype / denial","Pre-hype / denial","Regulatory awakening","Regulatory awakening","Reckoning","Operational maturity","Operational maturity"];
+  var V=[
+   ["You are ahead of the market","The advantage is real, but it only counts if it turns into an owned plan with a budget line.",1,5,5],
+   ["You know the standards","The gap now is between reading the guidance and being measured against it.",1,5,5],
+   ["The timeline feels distant","It isn't. Discovery alone takes longer than most boards expect, and it starts before anything else can.",2,4,4],
+   ["Attention is somewhere else","Understandable, and precisely why stage 7 hurts. The work doesn't shrink while you wait.",2,4,4],
+   ["The dates are real now","Every month from here costs more than the one before it. Sequencing matters more than speed.",3,3,3],
+   ["You can't migrate what you can't see","Inventory is the whole battle. Everything downstream depends on finishing it properly.",3,3,2],
+   ["You are in the scramble","Capacity is the constraint, not budget. Everyone is buying the same scarce skills in the same quarter.",5,1,1],
+   ["You have made it a programme","The work now is proving it repeatably, and keeping ownership when attention moves on.",3,3,3],
+   ["You are where the market is heading","Keep exercising the capability. Agility decays quietly the moment it stops being tested.",2,4,4]];
+
+  var board=document.getElementById('board');
+  var cols=[].slice.call(document.querySelectorAll('.col'));
+  var nodes=[].slice.call(document.querySelectorAll('.node'));
+  var chips=[].slice.call(document.querySelectorAll('.chip'));
+  var verdict=document.getElementById('verdict');
+  var vtag=document.getElementById('v-tag'),vhead=document.getElementById('v-head'),vbody=document.getElementById('v-body');
+  var meters={cost:document.querySelector('[data-m=cost]'),free:document.querySelector('[data-m=free]'),time:document.querySelector('[data-m=time]')};
+  var sel=-1;
+
+  function fill(el,n){[].slice.call(el.children).forEach(function(b,i){b.classList.toggle('f',i<n)})}
+
+  function pick(i){
+    sel=i;
+    board.classList.add('picked');
+    cols.forEach(function(c,k){c.classList.toggle('on',k===i)});
+    nodes.forEach(function(n,k){n.classList.toggle('on',k===i)});
+    chips.forEach(function(c,k){c.classList.toggle('on',k===i)});
+    var v=V[i];
+    vtag.textContent='Stage '+(i+1)+' · '+PH[i];
+    vhead.textContent=v[0];
+    vbody.textContent=v[1];
+    fill(meters.cost,v[2]);fill(meters.free,v[3]);fill(meters.time,v[4]);
+    verdict.classList.add('show');
+  }
+
+  cols.concat(nodes).concat(chips).forEach(function(el){
+    el.addEventListener('click',function(){pick(+el.dataset.i)});
+  });
+  cols.forEach(function(c,k){
+    c.addEventListener('mouseenter',function(){if(sel<0)nodes[k].classList.add('on')});
+    c.addEventListener('mouseleave',function(){if(sel<0)nodes[k].classList.remove('on')});
+  });
+
+  var svg=document.querySelector('.band svg.plot');
+  var peak=document.getElementById('peak');
+  if(svg&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
+    svg.classList.add('pre');
+    nodes.forEach(function(n){n.style.opacity=0});
+    var fired=false;
+    var go=function(){
+      if(fired)return;fired=true;
+      requestAnimationFrame(function(){svg.classList.remove('pre')});
+      nodes.forEach(function(n,i){setTimeout(function(){n.style.opacity=1},140*i+240)});
+      setTimeout(function(){peak.classList.add('go')},1800);
+    };
+    if('IntersectionObserver' in window){
+      var io=new IntersectionObserver(function(e){if(e[0].isIntersecting){io.disconnect();go()}},{threshold:.2});
+      io.observe(document.querySelector('.band'));
+    }else{go()}
+    setTimeout(go,2600);
+  }else if(peak){peak.style.opacity='.5'}
+})();
+</script>
+</body>
+</html>

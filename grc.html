@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cryptographic GRC | CipherWyze</title>
+  <meta name="description" content="A cryptography-specific governance, risk and evidence layer for enterprise transformation.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="page-wrapper"><div class="page-content">
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><img src="assets/cipherwyze-logo.png" alt="CipherWyze" height="32"></a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <div class="nav-item"><button class="nav-link">Platforms <svg class="chevron" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button><div class="nav-dropdown"><div class="dd-label">Platforms</div><a href="navigator.html" class="dd-link"><div><div class="dd-link-text">Navigator</div><div class="dd-link-sub">Cryptographic governance platform</div></div></a><a href="discovery.html" class="dd-link"><div><div class="dd-link-text">Discovery</div><div class="dd-link-sub">Cryptographic evidence engine</div></div></a></div></div>
+      <div class="nav-item"><button class="nav-link">Applications <svg class="chevron" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button><div class="nav-dropdown" style="min-width:280px"><div class="dd-label">Applications</div><a href="cryptographic-inventory.html" class="dd-link"><div><div class="dd-link-text">Cryptographic Inventory &amp; CBOM</div></div></a><a href="post-quantum.html" class="dd-link"><div><div class="dd-link-text">Post-Quantum Transition</div></div></a><a href="grc.html" class="dd-link"><div><div class="dd-link-text">Cryptographic GRC</div></div></a></div></div>
+      <a href="partners.html" class="nav-link">Partners</a><a href="contact.html" class="nav-link">Contact</a>
+    </div>
+    <div class="nav-actions"><a href="https://navigator.cipherwyze.com" class="btn btn-ghost btn-sm">Sign in</a><a href="contact.html" class="btn btn-primary btn-sm">Request a demo</a></div>
+    <button class="nav-burger" id="nav-burger"><span></span><span></span><span></span></button>
+  </div>
+  <div class="nav-mobile" id="nav-mobile">
+    <a href="index.html" class="nm-link">Home</a>
+    <div class="nm-section-title">Platforms</div><a href="navigator.html" class="nm-link nm-sub">Navigator</a><a href="discovery.html" class="nm-link nm-sub">Discovery</a>
+    <div class="nm-section-title">Applications</div><a href="cryptographic-inventory.html" class="nm-link nm-sub">Cryptographic Inventory &amp; CBOM</a><a href="post-quantum.html" class="nm-link nm-sub">Post-Quantum Transition</a><a href="grc.html" class="nm-link nm-sub">Cryptographic GRC</a>
+    <a href="partners.html" class="nm-link">Partners</a><a href="contact.html" class="nm-link">Contact</a>
+    <div class="nm-actions"><a href="https://navigator.cipherwyze.com" class="btn btn-outline">Sign in</a><a href="contact.html" class="btn btn-primary">Request a demo</a></div>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="s-label"><span class="s-label-line"></span>Application · GRC</div>
+    <h1>Cryptographic GRC: governance, risk and evidence for the cryptographic estate.</h1>
+    <p class="lead">Cryptography now underpins identity, payments, communications, software, infrastructure, data protection and digital trust. Yet in many organisations it is still managed as fragmented technical plumbing. Cryptographic GRC brings governance, risk management and evidence to the cryptographic estate.</p>
+    <div style="display:flex;gap:1rem;flex-wrap:wrap">
+      <a href="contact.html" class="btn btn-primary btn-lg">Request a cryptographic governance briefing</a>
+    </div>
+  </div>
+</div>
+
+<!-- GOVERNANCE LIFECYCLE -->
+<section class="section">
+  <div style="max-width:var(--max-w);margin:0 auto">
+    <div class="aos" style="text-align:center;max-width:640px;margin:0 auto 3.5rem">
+      <div class="s-label" style="justify-content:center"><span class="s-label-line"></span>Governance Lifecycle</div>
+      <h2>Eight stages of cryptographic governance.</h2>
+      <p style="margin-top:1.25rem">Cryptographic risk is no longer confined to specialist teams. Post-quantum transition, certificate failures, deprecated algorithms, supplier dependencies and regulatory expectations are pushing cryptography into enterprise governance.</p>
+    </div>
+    <div class="grid g4 aos aos-delay-1">
+      <div class="card" style="text-align:center">
+        <div style="width:48px;height:48px;border-radius:50%;background:rgba(6,200,232,0.1);border:1px solid rgba(6,200,232,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:0.75rem;font-weight:700;color:var(--cyan)">01</div>
+        <h5>Inventory &amp; Visibility</h5>
+        <p style="font-size:0.875rem;margin-top:0.5rem">Establish a cryptographic operating view across the estate</p>
+      </div>
+      <div class="card" style="text-align:center">
+        <div style="width:48px;height:48px;border-radius:50%;background:rgba(6,200,232,0.1);border:1px solid rgba(6,200,232,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:0.75rem;font-weight:700;color:var(--cyan)">02</div>
+        <h5>Ownership &amp; Accountability</h5>
+        <p style="font-size:0.875rem;margin-top:0.5rem">Assign responsibility for every cryptographic asset and dependency</p>
+      </div>
+      <div class="card" style="text-align:center">
+        <div style="width:48px;height:48px;border-radius:50%;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:0.75rem;font-weight:700;color:var(--amber)">03</div>
+        <h5>Risk &amp; Readiness Classification</h5>
+        <p style="font-size:0.875rem;margin-top:0.5rem">Assess exposure, criticality and maturity across the estate</p>
+      </div>
+      <div class="card" style="text-align:center">
+        <div style="width:48px;height:48px;border-radius:50%;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:0.75rem;font-weight:700;color:var(--amber)">04</div>
+        <h5>Prioritisation &amp; Roadmap</h5>
+        <p style="font-size:0.875rem;margin-top:0.5rem">Define transition priorities and programme roadmap</p>
+      </div>
+      <div class="card" style="text-align:center">
+        <div style="width:48px;height:48px;border-radius:50%;background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:0.75rem;font-weight:700;color:var(--purple)">05</div>
+        <h5>Remediation Governance</h5>
+        <p style="font-size:0.875rem;margin-top:0.5rem">Coordinate and track remediation work across teams and suppliers</p>
+      </div>
+      <div class="card" style="text-align:center">
+        <div style="width:48px;height:48px;border-radius:50%;background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:0.75rem;font-weight:700;color:var(--purple)">06</div>
+        <h5>Evidence Capture</h5>
+        <p style="font-size:0.875rem;margin-top:0.5rem">Document decisions, actions, exceptions and closure records</p>
+      </div>
+      <div class="card" style="text-align:center">
+        <div style="width:48px;height:48px;border-radius:50%;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:0.75rem;font-weight:700;color:var(--emerald)">07</div>
+        <h5>Executive &amp; Audit Reporting</h5>
+        <p style="font-size:0.875rem;margin-top:0.5rem">Report governance posture and programme progress to all audiences</p>
+      </div>
+      <div class="card" style="text-align:center">
+        <div style="width:48px;height:48px;border-radius:50%;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:0.75rem;font-weight:700;color:var(--emerald)">08</div>
+        <h5>Continuous Review</h5>
+        <p style="font-size:0.875rem;margin-top:0.5rem">Maintain an ongoing governance posture as the estate and threats evolve</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CRYPTO GRC VS BROAD GRC -->
+<section class="section" style="background:var(--bg-surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div style="max-width:var(--max-w);margin:0 auto">
+    <div class="aos" style="text-align:center;max-width:640px;margin:0 auto 3.5rem">
+      <div class="s-label" style="justify-content:center"><span class="s-label-line"></span>Positioning</div>
+      <h2>Broad GRC systems need a cryptography-specific operating layer.</h2>
+      <p style="margin-top:1.25rem">Generic GRC platforms are important, but they are not usually designed around cryptographic inventory, CBOM, algorithm exposure, certificate dependency, PQC transition or cryptographic remediation orchestration.</p>
+    </div>
+    <div class="compare aos aos-delay-1">
+      <div class="compare-col">
+        <h4 style="margin-bottom:1.5rem">Broad GRC Handles</h4>
+        <ul class="item-list">
+          <li>Enterprise risk workflows</li>
+          <li>Controls and compliance management</li>
+          <li>Broad issue and exception tracking</li>
+          <li>Policy management</li>
+          <li>Regulatory obligations</li>
+          <li>Third-party risk frameworks</li>
+        </ul>
+      </div>
+      <div class="compare-col" style="border-color:rgba(6,200,232,0.2)">
+        <h4 style="margin-bottom:1.5rem;color:var(--cyan)">Navigator Adds for Cryptography</h4>
+        <ul class="item-list">
+          <li>Cryptographic inventory and CBOM</li>
+          <li>Algorithm and certificate exposure tracking</li>
+          <li>CBOM and cryptographic dependencies</li>
+          <li>PQC transition state and progress</li>
+          <li>Cryptographic ownership and evidence</li>
+          <li>Remediation governance with auditability</li>
+        </ul>
+        <div style="margin-top:1.25rem;background:rgba(6,200,232,0.06);border:1px solid rgba(6,200,232,0.12);border-radius:var(--radius);padding:0.875rem;font-size:0.8125rem;color:var(--text-2)">Navigator can provide cryptographic governance evidence and programme state that informs broader GRC processes.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GOVERNANCE VS FINDINGS -->
+<section class="section">
+  <div style="max-width:var(--max-w);margin:0 auto">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start">
+      <div class="aos">
+        <div class="s-label"><span class="s-label-line"></span>The Gap</div>
+        <h2>Technical findings are not the same as governance.</h2>
+        <p style="margin-top:1.25rem">A scan may show exposure. A report may identify gaps. But organisations still need to decide who owns the issue, what the remediation path is, what evidence is required and how progress will be monitored.</p>
+        <div class="pullquote" style="margin-top:2rem">
+          <p>Cryptographic GRC turns cryptographic visibility into accountable work.</p>
+        </div>
+      </div>
+      <div class="aos aos-delay-2">
+        <div class="s-label"><span class="s-label-line"></span>Governance Decisions Needed</div>
+        <div class="n-list">
+          <div class="n-item"><span class="n-item-num">→</span>Who owns the issue?</div>
+          <div class="n-item"><span class="n-item-num">→</span>Is it in scope?</div>
+          <div class="n-item"><span class="n-item-num">→</span>How urgent is it?</div>
+          <div class="n-item"><span class="n-item-num">→</span>What remediation path is acceptable?</div>
+          <div class="n-item"><span class="n-item-num">→</span>What evidence is required?</div>
+          <div class="n-item"><span class="n-item-num">→</span>How will progress be monitored?</div>
+          <div class="n-item"><span class="n-item-num">→</span>How will exceptions be approved?</div>
+          <div class="n-item"><span class="n-item-num">→</span>How will executives be informed?</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" style="background:var(--bg-surface);border-top:1px solid var(--border)">
+  <div class="cta-glow"></div>
+  <div class="cta-inner aos">
+    <div class="s-label" style="justify-content:center"><span class="s-label-line"></span>Get Started</div>
+    <h2>Govern cryptographic risk before it becomes operational disruption.</h2>
+    <p>Request a cryptographic governance briefing to explore how CipherWyze can support your programme.</p>
+    <div class="cta-actions"><a href="contact.html" class="btn btn-primary btn-lg">Request a cryptographic governance briefing</a></div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand"><a href="index.html" class="footer-logo"><img src="assets/cipherwyze-logo.png" alt="CipherWyze" height="28" style="filter:brightness(0) invert(1);opacity:0.85"></a><p class="footer-brand-desc">The enterprise cryptographic governance platform. Navigator is the system of record for cryptographic transformation.</p></div>
+    <div class="footer-col"><h6>Platform</h6><ul><li><a href="navigator.html">Navigator</a></li><li><a href="discovery.html">Discovery</a></li></ul></div>
+    <div class="footer-col"><h6>Applications</h6><ul><li><a href="cryptographic-inventory.html">Cryptographic Inventory &amp; CBOM</a></li><li><a href="post-quantum.html">Post-Quantum Transition</a></li><li><a href="grc.html">Cryptographic GRC</a></li></ul></div>
+    <div class="footer-col"><h6>Company</h6><ul><li><a href="partners.html">Partners</a></li><li><a href="contact.html">Contact</a></li><li><a href="https://navigator.cipherwyze.com">Sign in</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><div>© 2024 CipherWyze. All rights reserved.</div><a href="contact.html" class="btn btn-primary btn-sm">Request a Navigator demo</a></div>
+</footer>
+
+</div></div>
+<script>
+const burger = document.getElementById('nav-burger'); const mobileNav = document.getElementById('nav-mobile');
+burger.addEventListener('click', () => { burger.classList.toggle('open'); mobileNav.classList.toggle('open'); });
+const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); observer.unobserve(e.target); } }); }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+document.querySelectorAll('.aos').forEach(el => observer.observe(el));
+</script>
+</body></html>

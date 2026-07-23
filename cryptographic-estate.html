@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Enterprise Cryptographic Transformation — the estate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════
+   Cryptographic estate — hub & spoke
+   Light by default. Add data-theme="dark" on .cx to flip.
+   Everything is namespaced under .cx
+   ═══════════════════════════════════════════════ */
+
+.cx {
+  /* ── theme tokens: light ─────────────── */
+  --bg:        #F5F8FC;
+  --bg-glow:   #FFFFFF;
+  --panel:     #FFFFFF;
+  --grid:      #E1E8F3;
+  --hair:      #E6EBF4;
+  --text:      #101828;
+  --muted:     #57637A;
+
+  --tint-s: 72%;  --tint-l: 97%;  --tint-a: 1;      /* node fill wash   */
+  --bd-s:   55%;  --bd-l:   72%;  --bd-a: .95;      /* node border      */
+  --bd-hi-l: 52%;                                   /* border on hover  */
+  --glyph-l: 42%;                                   /* icon stroke      */
+  --badge-l: 46%; --badge-fg: #FFFFFF;              /* number chip      */
+  --spoke-a1: .18; --spoke-a2: .55; --spoke-l: 58%;
+  --rotor: rgba(88,107,138,.42);
+  --dim: .42;
+  --lift: 0 8px 24px -12px rgba(16,32,64,.34);
+  --core-shadow: 0 24px 60px -30px rgba(23,42,84,.45);
+
+  /* ── ramp: teal → violet, one hue per domain ── */
+  --hue-start: 172;
+  --hue-step:  10.6;
+
+  /* ── geometry ─────────────────────────── */
+  --R:    336px;   /* centre → node centre */
+  --node: 184px;
+  --core: 300px;
+
+  position: relative;
+  background:
+    radial-gradient(115% 85% at 50% -8%, var(--bg-glow) 0%, var(--bg) 58%),
+    var(--bg);
+  color: var(--text);
+  font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  padding: clamp(40px, 6vw, 88px) 24px clamp(44px, 6vw, 76px);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.cx[data-theme="dark"] {
+  --bg:        #070B14;
+  --bg-glow:   #142138;
+  --panel:     #0D1421;
+  --grid:      #1B2740;
+  --hair:      #1E2A40;
+  --text:      #E8EDF7;
+  --muted:     #8494AE;
+
+  --tint-s: 42%;  --tint-l: 22%;  --tint-a: .55;
+  --bd-s:   45%;  --bd-l:   50%;  --bd-a: .5;
+  --bd-hi-l: 62%;
+  --glyph-l: 66%;
+  --badge-l: 48%; --badge-fg: #050810;
+  --spoke-a1: .12; --spoke-a2: .5; --spoke-l: 60%;
+  --rotor: rgba(150,175,210,.4);
+  --dim: .36;
+  --lift: 0 18px 50px -18px rgba(0,0,0,.8);
+  --core-shadow: 0 30px 80px -24px rgba(4,10,30,.9);
+}
+
+.cx *, .cx *::before, .cx *::after { box-sizing: border-box; }
+
+/* surveyed grid — the estate is measured, not decorated */
+.cx::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 68px 68px;
+  mask-image: radial-gradient(68% 58% at 50% 46%, #000 0%, transparent 78%);
+  -webkit-mask-image: radial-gradient(68% 58% at 50% 46%, #000 0%, transparent 78%);
+  z-index: -1;
+}
+
+/* ── header ───────────────────────────────── */
+.cx-head { max-width: 760px; margin: 0 auto clamp(30px, 4vw, 54px); text-align: center; }
+
+.cx-eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 12px; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--muted); margin: 0 0 18px;
+}
+.cx-eyebrow::before {
+  content: ""; width: 30px; height: 1px;
+  background: linear-gradient(90deg, transparent, hsl(var(--hue-start) 60% 45%));
+}
+
+.cx-title {
+  margin: 0 0 16px;
+  font-size: clamp(30px, 4.4vw, 50px); font-weight: 600;
+  line-height: 1.06; letter-spacing: -.026em;
+}
+.cx-title em {
+  font-style: normal;
+  background: linear-gradient(96deg, hsl(174 68% 36%), hsl(214 74% 48%), hsl(268 62% 54%));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.cx[data-theme="dark"] .cx-title em {
+  background: linear-gradient(96deg, hsl(172 72% 58%), hsl(268 78% 70%));
+  -webkit-background-clip: text; background-clip: text;
+}
+.cx-sub { margin: 0; color: var(--muted); font-size: clamp(15px, 1.5vw, 17px); line-height: 1.62; }
+
+/* ── ring ─────────────────────────────────── */
+.cx-ring {
+  position: relative;
+  width: calc(var(--R) * 2 + var(--node));
+  height: calc(var(--R) * 2 + var(--node));
+  margin: 0 auto;
+}
+
+.cx-spoke {
+  position: absolute; left: 50%; top: 50%;
+  width: calc(var(--R) - var(--core) / 2 - var(--node) / 2 - 10px);
+  height: 1px;
+  transform-origin: 0 50%;
+  transform: rotate(calc(-90deg + 36deg * var(--i))) translateX(calc(var(--core) / 2 + 8px));
+  background: linear-gradient(90deg,
+    hsl(var(--h) 55% var(--spoke-l) / var(--spoke-a1)),
+    hsl(var(--h) 60% var(--spoke-l) / var(--spoke-a2)));
+  transition: opacity .3s ease;
+}
+
+/* ── core ─────────────────────────────────── */
+.cx-core {
+  position: absolute; left: 50%; top: 50%;
+  width: var(--core); height: var(--core);
+  transform: translate(-50%, -50%);
+  border-radius: 50%; padding: 2px;
+  background: conic-gradient(from 200deg,
+    hsl(174 66% 44%), hsl(206 72% 50%), hsl(238 66% 56%),
+    hsl(268 62% 58%), hsl(300 50% 54%), hsl(174 66% 44%));
+  display: grid; place-items: center;
+  box-shadow: var(--core-shadow);
+}
+.cx-core-inner {
+  width: 100%; height: 100%; border-radius: 50%;
+  background: var(--panel);
+  display: grid; place-items: center; text-align: center;
+  padding: 34px 42px;
+}
+.cx-core h2 {
+  margin: 0; font-size: 25px; font-weight: 600;
+  line-height: 1.16; letter-spacing: -.02em;
+}
+.cx-core-note {
+  margin: 14px auto 0; padding-top: 14px; max-width: 200px;
+  border-top: 1px solid var(--hair);
+  font-size: 13px; line-height: 1.5; color: var(--muted);
+}
+.cx-core-detail { display: none; }
+.cx-core-detail .cx-tag {
+  display: block; margin-bottom: 10px;
+  font-family: "IBM Plex Mono", monospace; font-size: 11px;
+  letter-spacing: .16em; text-transform: uppercase;
+  color: hsl(var(--h, 210) 62% var(--glyph-l));
+}
+.cx-ring[data-active] .cx-core-default { display: none; }
+.cx-ring[data-active] .cx-core-detail  { display: block; }
+
+/* cipher rotor — one flourish, always turning */
+.cx-rotor {
+  --rotor-size: calc(var(--core) + 84px);
+  position: absolute;
+  width: var(--rotor-size); height: var(--rotor-size);
+  left: 50%; top: 50%;
+  margin-left: calc(var(--rotor-size) / -2);
+  margin-top:  calc(var(--rotor-size) / -2);
+  overflow: visible; pointer-events: none;
+  transform-origin: 50% 50%;
+  animation: cx-spin 96s linear infinite;
+}
+.cx-rotor .cx-rotor-track {
+  fill: none; stroke: var(--rotor); stroke-width: 1; stroke-dasharray: 1.5 9;
+}
+.cx-rotor text {
+  font-family: "IBM Plex Mono", monospace; font-size: 10px;
+  fill: var(--rotor);
+}
+@keyframes cx-spin { to { transform: rotate(360deg); } }
+
+/* ── nodes ────────────────────────────────── */
+.cx-node {
+  --h: calc(var(--hue-start) + var(--hue-step) * var(--i));
+  position: absolute; left: 50%; top: 50%;
+  width: var(--node); height: var(--node);
+  margin-left: calc(var(--node) / -2);
+  margin-top:  calc(var(--node) / -2);
+  transform: rotate(calc(-90deg + 36deg * var(--i))) translateX(var(--R)) rotate(calc(90deg - 36deg * var(--i)));
+  border-radius: 50%;
+  border: 1px solid hsl(var(--h) var(--bd-s) var(--bd-l) / var(--bd-a));
+  background:
+    radial-gradient(78% 78% at 50% 10%, hsl(var(--h) var(--tint-s) var(--tint-l) / var(--tint-a)), var(--panel) 74%);
+  box-shadow: var(--lift);
+  color: inherit; font: inherit; text-align: center; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 9px; padding: 20px;
+  transition: transform .4s cubic-bezier(.2,.8,.3,1), border-color .3s ease, box-shadow .3s ease, opacity .3s ease;
+}
+
+.cx-node .cx-i {
+  position: absolute; top: 0; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 30px; height: 30px; border-radius: 50%;
+  background: hsl(var(--h) 58% var(--badge-l));
+  color: var(--badge-fg);
+  font-family: "IBM Plex Mono", monospace; font-size: 12px; font-weight: 500;
+  display: grid; place-items: center;
+  box-shadow: 0 0 0 5px var(--bg);
+}
+
+.cx-node .cx-glyph {
+  width: 24px; height: 24px; flex: none;
+  stroke: hsl(var(--h) 62% var(--glyph-l));
+  fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
+}
+
+/* the fix: text block is its own column, capped inside the circle's chord */
+.cx-node .cx-body {
+  display: flex; flex-direction: column; gap: 5px;
+  max-width: 132px;
+}
+.cx-node .cx-name {
+  display: block; font-size: 15px; font-weight: 600;
+  line-height: 1.2; letter-spacing: -.012em;
+  text-wrap: balance;
+}
+.cx-node .cx-meta {
+  display: block;
+  font-family: "IBM Plex Mono", monospace; font-size: 10.5px;
+  line-height: 1.4; letter-spacing: .01em; color: var(--muted);
+}
+
+.cx-node:hover, .cx-node:focus-visible {
+  transform: rotate(calc(-90deg + 36deg * var(--i))) translateX(calc(var(--R) + 10px)) rotate(calc(90deg - 36deg * var(--i)));
+  border-color: hsl(var(--h) 62% var(--bd-hi-l));
+  box-shadow: 0 0 0 1px hsl(var(--h) 62% var(--bd-hi-l) / .45), 0 20px 44px -18px hsl(var(--h) 60% 40% / .55);
+  outline: none;
+}
+.cx-node:focus-visible {
+  box-shadow: 0 0 0 3px hsl(var(--h) 70% var(--bd-hi-l) / .5), 0 20px 44px -18px hsl(var(--h) 60% 40% / .55);
+}
+
+.cx-ring[data-active] .cx-node:not(:hover):not(:focus-visible) { opacity: var(--dim); }
+.cx-ring[data-active] .cx-spoke { opacity: .3; }
+
+/* ── footer ───────────────────────────────── */
+.cx-foot {
+  max-width: 700px; margin: clamp(30px, 4vw, 52px) auto 0;
+  text-align: center; color: var(--muted);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 12px; letter-spacing: .04em; line-height: 1.7;
+}
+.cx-foot b { color: var(--text); font-weight: 500; }
+
+/* ── responsive: the ring unrolls ─────────── */
+@media (max-width: 980px) {
+  .cx-ring { width: 100%; max-width: 560px; height: auto; display: grid; gap: 14px; }
+  .cx-spoke, .cx-rotor { display: none; }
+
+  .cx-core {
+    position: static; width: 100%; height: auto;
+    transform: none; border-radius: 20px; margin-bottom: 22px;
+    box-shadow: 0 10px 30px -20px rgba(16,32,64,.4);
+  }
+  .cx-core-inner { border-radius: 19px; padding: 30px 26px; }
+  .cx-core h2 { font-size: 22px; }
+
+  .cx-node {
+    position: static; width: 100%; height: auto; margin: 0;
+    transform: none; border-radius: 16px;
+    flex-direction: row; align-items: center; justify-content: flex-start;
+    text-align: left; gap: 16px; padding: 18px 20px 18px 56px;
+  }
+  .cx-node:hover, .cx-node:focus-visible { transform: none; }
+  .cx-node .cx-body { max-width: none; }
+  .cx-node .cx-i { top: 50%; left: 20px; transform: translateY(-50%); box-shadow: none; }
+
+  .cx-ring[data-active] .cx-node:not(:hover):not(:focus-visible) { opacity: 1; }
+  .cx-ring[data-active] .cx-core-default { display: block; }
+  .cx-ring[data-active] .cx-core-detail  { display: none; }
+}
+@media (max-width: 440px) {
+  .cx-node .cx-glyph { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cx-rotor { animation: none; }
+  .cx-node { transition: opacity .2s ease, border-color .2s ease; }
+  .cx-node:hover, .cx-node:focus-visible {
+    transform: rotate(calc(-90deg + 36deg * var(--i))) translateX(var(--R)) rotate(calc(90deg - 36deg * var(--i)));
+  }
+}
+
+/* ── demo shell — delete when embedding ───── */
+body { margin: 0; background: #F5F8FC; }
+.cx-theme {
+  position: absolute; top: 20px; right: 20px; z-index: 2;
+  font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--muted);
+  background: var(--panel); border: 1px solid var(--hair);
+  border-radius: 999px; padding: 9px 16px; cursor: pointer;
+}
+.cx-theme:hover { color: var(--text); }
+</style>
+</head>
+<body>
+
+<section class="cx" id="cxRoot">
+  <button class="cx-theme" id="cxTheme" type="button">Dark</button>
+
+  <header class="cx-head">
+    <p class="cx-eyebrow">Where the cryptography lives</p>
+    <h1 class="cx-title">Enterprise <em>Cryptographic Transformation</em></h1>
+    <p class="cx-sub">Ten domains hold the keys, certificates and algorithms an organisation runs on. Each has its own owners, lifecycles and blind spots. Governing them together starts with seeing them together.</p>
+  </header>
+
+  <div class="cx-ring" id="cxRing">
+
+    <i class="cx-spoke" style="--i:0;--h:172"></i>
+    <i class="cx-spoke" style="--i:1;--h:183"></i>
+    <i class="cx-spoke" style="--i:2;--h:193"></i>
+    <i class="cx-spoke" style="--i:3;--h:204"></i>
+    <i class="cx-spoke" style="--i:4;--h:215"></i>
+    <i class="cx-spoke" style="--i:5;--h:225"></i>
+    <i class="cx-spoke" style="--i:6;--h:236"></i>
+    <i class="cx-spoke" style="--i:7;--h:246"></i>
+    <i class="cx-spoke" style="--i:8;--h:257"></i>
+    <i class="cx-spoke" style="--i:9;--h:268"></i>
+
+    <div class="cx-core">
+      <svg class="cx-rotor" viewBox="0 0 400 400" aria-hidden="true" focusable="false">
+        <circle class="cx-rotor-track" cx="200" cy="200" r="194"/>
+        <g>
+          <text transform="rotate(0.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">4</text>
+          <text transform="rotate(5.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">F</text>
+          <text transform="rotate(10.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">2</text>
+          <text transform="rotate(15.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">A</text>
+          <text transform="rotate(20.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">9</text>
+          <text transform="rotate(25.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">C</text>
+          <text transform="rotate(30.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">0</text>
+          <text transform="rotate(35.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">E</text>
+          <text transform="rotate(40.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">7</text>
+          <text transform="rotate(45.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">B</text>
+          <text transform="rotate(50.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">1</text>
+          <text transform="rotate(55.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">D</text>
+          <text transform="rotate(60.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">6</text>
+          <text transform="rotate(65.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">8</text>
+          <text transform="rotate(70.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">3</text>
+          <text transform="rotate(75.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">5</text>
+          <text transform="rotate(80.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">A</text>
+          <text transform="rotate(85.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">C</text>
+          <text transform="rotate(90.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">4</text>
+          <text transform="rotate(95.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">9</text>
+          <text transform="rotate(100.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">E</text>
+          <text transform="rotate(105.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">2</text>
+          <text transform="rotate(110.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">0</text>
+          <text transform="rotate(115.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">F</text>
+          <text transform="rotate(120.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">7</text>
+          <text transform="rotate(125.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">D</text>
+          <text transform="rotate(130.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">3</text>
+          <text transform="rotate(135.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">B</text>
+          <text transform="rotate(140.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">5</text>
+          <text transform="rotate(145.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">8</text>
+          <text transform="rotate(150.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">C</text>
+          <text transform="rotate(155.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">1</text>
+          <text transform="rotate(160.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">6</text>
+          <text transform="rotate(165.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">A</text>
+          <text transform="rotate(170.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">9</text>
+          <text transform="rotate(175.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">4</text>
+          <text transform="rotate(180.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">0</text>
+          <text transform="rotate(185.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">7</text>
+          <text transform="rotate(190.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">2</text>
+          <text transform="rotate(195.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">D</text>
+          <text transform="rotate(200.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">F</text>
+          <text transform="rotate(205.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">3</text>
+          <text transform="rotate(210.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">1</text>
+          <text transform="rotate(215.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">6</text>
+          <text transform="rotate(220.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">8</text>
+          <text transform="rotate(225.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">B</text>
+          <text transform="rotate(230.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">5</text>
+          <text transform="rotate(235.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">E</text>
+          <text transform="rotate(240.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">2</text>
+          <text transform="rotate(245.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">C</text>
+          <text transform="rotate(250.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">7</text>
+          <text transform="rotate(255.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">A</text>
+          <text transform="rotate(260.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">0</text>
+          <text transform="rotate(265.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">D</text>
+          <text transform="rotate(270.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">4</text>
+          <text transform="rotate(275.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">1</text>
+          <text transform="rotate(280.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">9</text>
+          <text transform="rotate(285.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">F</text>
+          <text transform="rotate(290.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">8</text>
+          <text transform="rotate(295.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">6</text>
+          <text transform="rotate(300.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">B</text>
+          <text transform="rotate(305.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">3</text>
+          <text transform="rotate(310.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">E</text>
+          <text transform="rotate(315.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">5</text>
+          <text transform="rotate(320.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">4</text>
+          <text transform="rotate(325.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">F</text>
+          <text transform="rotate(330.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">2</text>
+          <text transform="rotate(335.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">A</text>
+          <text transform="rotate(340.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">9</text>
+          <text transform="rotate(345.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">C</text>
+          <text transform="rotate(350.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">0</text>
+          <text transform="rotate(355.0 200 200) translate(0 -177)" x="200" y="200" text-anchor="middle" dominant-baseline="central">E</text>
+        </g>
+      </svg>
+      <div class="cx-core-inner">
+        <div class="cx-core-default">
+          <h2>A system of record<br>for the estate</h2>
+          <p class="cx-core-note">One inventory, one policy, one place to prove what changed.</p>
+        </div>
+        <div class="cx-core-detail" aria-live="polite">
+          <span class="cx-tag" id="cxTag"></span>
+          <h2 id="cxName"></h2>
+          <p class="cx-core-note" id="cxDesc"></p>
+        </div>
+      </div>
+    </div>
+
+    <button class="cx-node" type="button" style="--i:0" data-tag="Domain 01"
+      data-name="PKI &amp; Certificates"
+      data-desc="Issuing authorities, leaf certificates, and the HSMs that hold the roots.">
+      <span class="cx-i">01</span>
+      <svg class="cx-glyph" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10.5" width="16" height="10" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/><circle cx="12" cy="15.5" r="1.3"/></svg>
+      <span class="cx-body">
+        <span class="cx-name">PKI &amp; Certificates</span>
+        <span class="cx-meta">CAs · Certs · HSMs</span>
+      </span>
+    </button>
+
+    <button class="cx-node" type="button" style="--i:1" data-tag="Domain 02"
+      data-name="TLS &amp; Protocols"
+      data-desc="Every handshake in transit: TLS, mTLS, VPN tunnels and their cipher suites.">
+      <span class="cx-i">02</span>
+      <svg class="cx-glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7.5 3v5.2c0 4.4-3 8.1-7.5 9.3-4.5-1.2-7.5-4.9-7.5-9.3V6z"/><path d="M9 12l2.2 2.2L15.4 10"/></svg>
+      <span class="cx-body">
+        <span class="cx-name">TLS &amp; Protocols</span>
+        <span class="cx-meta">TLS · mTLS · VPNs</span>
+      </span>
+    </button>
+
+    <button class="cx-node" type="button" style="--i:2" data-tag="Domain 03"
+      data-name="Identity &amp; Access"
+      data-desc="Sign-in, MFA and the signed tokens that assert who someone is.">
+      <span class="cx-i">03</span>
+      <svg class="cx-glyph" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.4"/><path d="M4.8 20a7.2 7.2 0 0 1 14.4 0"/></svg>
+      <span class="cx-body">
+        <span class="cx-name">Identity &amp; Access</span>
+        <span class="cx-meta">SSO · MFA · Tokens</span>
+      </span>
+    </button>
+
+    <button class="cx-node" type="button" style="--i:3" data-tag="Domain 04"
+      data-name="APIs &amp; Services"
+      data-desc="Service-to-service calls, gateways, and the keys that sign and verify them.">
+      <span class="cx-i">04</span>
+      <svg class="cx-glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 4C7.5 4 8 8.5 5.5 8.5 8 8.5 7.5 20 9.5 20"/><path d="M14.5 4c2 0 1.5 4.5 4 4.5-2.5 0-2 11.5-4 11.5"/></svg>
+      <span class="cx-body">
+        <span class="cx-name">APIs &amp; Services</span>
+        <span class="cx-meta">Gateways · Services</span>
+      </span>
+    </button>
+
+    <button class="cx-node" type="button" style="--i:4" data-tag="Domain 05"
+      data-name="Suppliers &amp; Partners"
+      data-desc="Third-party libraries and services whose cryptography you inherit but don't control.">
+      <span class="cx-i">05</span>
+      <svg class="cx-glyph" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="2.8"/><circle cx="16.8" cy="10.4" r="2.2"/><path d="M3.6 19a5.4 5.4 0 0 1 10.8 0"/><path d="M16 15.2a4.4 4.4 0 0 1 4.4 3.8"/></svg>
+      <span class="cx-body">
+        <span class="cx-name">Suppliers &amp; Partners</span>
+        <span class="cx-meta">Vendors · Libraries</span>
+      </span>
+    </button>
+
+    <button class="cx-node" type="button" style="--i:5" data-tag="Domain 06"
+      data-name="Long-lived Data"
+      data-desc="Archives, backups and signatures that must still hold up decades from now.">
+      <span class="cx-i">06</span>
+      <svg class="cx-glyph" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="6.2" rx="7" ry="2.8"/><path d="M5 6.2v11.6c0 1.55 3.13 2.8 7 2.8s7-1.25 7-2.8V6.2"/><path d="M5 12c0 1.55 3.13 2.8 7 2.8s7-1.25 7-2.8"/></svg>
+      <span class="cx-body">
+        <span class="cx-name">Long-lived Data</span>
+        <span class="cx-meta">Archives · Backups</span>
+      </span>
+    </button>
+
+    <button class="cx-node" type="button" style="--i:6" data-tag="Domain 07"
+      data-name="Software Integrity"
+      data-desc="Code signing, release artefacts, and the pipelines that produce them.">
+      <span class="cx-i">07</span>
+      <svg class="cx-glyph" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4.5" width="18" height="15" rx="2"/><path d="M3 9h18"/><path d="M9.5 12.5L7.6 14.4l1.9 1.9M14.5 12.5l1.9 1.9-1.9 1.9"/></svg>
+      <span class="cx-body">
+        <span class="cx-name">Software Integrity</span>
+        <span class="cx-meta">Signing · CI/CD</span>
+      </span>
+    </button>
+
+    <button class="cx-node" type="button" style="--i:7" data-tag="Domain 08"
+      data-name="Embedded Systems"
+      data-desc="Firmware, bootloaders and secure elements with algorithms fixed in hardware.">
+      <span class="cx-i">08</span>
+      <svg class="cx-glyph" viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="6.5" width="11" height="11" rx="1.6"/><rect x="10" y="10" width="4" height="4" rx="1"/><path d="M9.5 3v3.5M14.5 3v3.5M9.5 17.5V21M14.5 17.5V21M3 9.5h3.5M3 14.5h3.5M17.5 9.5H21M17.5 14.5H21"/></svg>
+      <span class="cx-body">
+        <span class="cx-name">Embedded Systems</span>
+        <span class="cx-meta">Firmware · Boot</span>
+      </span>
+    </button>
+
+    <button class="cx-node" type="button" style="--i:8" data-tag="Domain 09"
+      data-name="IoT / OT"
+      data-desc="Sensors, PLCs and industrial systems on constrained, long-lived hardware.">
+      <span class="cx-i">09</span>
+      <svg class="cx-glyph" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="1.8"/><path d="M8.4 8.4a5 5 0 0 0 0 7.2M15.6 8.4a5 5 0 0 1 0 7.2"/><path d="M5.6 5.6a9 9 0 0 0 0 12.8M18.4 5.6a9 9 0 0 1 0 12.8"/></svg>
+      <span class="cx-body">
+        <span class="cx-name">IoT / OT</span>
+        <span class="cx-meta">Sensors · PLCs</span>
+      </span>
+    </button>
+
+    <button class="cx-node" type="button" style="--i:9" data-tag="Domain 10"
+      data-name="Cloud &amp; Infrastructure"
+      data-desc="Managed keys, KMS policy, infrastructure as code and container images.">
+      <span class="cx-i">10</span>
+      <svg class="cx-glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 18.5a4.2 4.2 0 0 1-.5-8.37 5.4 5.4 0 0 1 10.3 1.1A3.65 3.65 0 0 1 17 18.5z"/></svg>
+      <span class="cx-body">
+        <span class="cx-name">Cloud &amp; Infra</span>
+        <span class="cx-meta">KMS · IaC · Containers</span>
+      </span>
+    </button>
+
+  </div>
+
+  <p class="cx-foot">
+    <b>Hover or tab through a domain</b> to read what it covers. Numbering is a reference key, not a sequence — the domains are worked in parallel.
+  </p>
+</section>
+
+<script>
+(function () {
+  var ring = document.getElementById('cxRing');
+  if (!ring) return;
+  var tag = document.getElementById('cxTag'),
+      name = document.getElementById('cxName'),
+      desc = document.getElementById('cxDesc'),
+      detail = ring.querySelector('.cx-core-detail');
+
+  function show(node) {
+    tag.textContent  = node.dataset.tag;
+    name.textContent = node.dataset.name;
+    desc.textContent = node.dataset.desc;
+    detail.style.setProperty('--h', getComputedStyle(node).getPropertyValue('--h'));
+    ring.setAttribute('data-active', '');
+  }
+  function clear() { ring.removeAttribute('data-active'); }
+
+  Array.prototype.forEach.call(ring.querySelectorAll('.cx-node'), function (node) {
+    node.addEventListener('mouseenter', function () { show(node); });
+    node.addEventListener('focus',      function () { show(node); });
+    node.addEventListener('click',      function () { show(node); });
+    node.addEventListener('mouseleave', clear);
+    node.addEventListener('blur',       clear);
+  });
+
+  /* demo shell — delete when embedding */
+  var root = document.getElementById('cxRoot'), btn = document.getElementById('cxTheme');
+  if (btn) btn.addEventListener('click', function () {
+    var dark = root.getAttribute('data-theme') === 'dark';
+    if (dark) { root.removeAttribute('data-theme'); btn.textContent = 'Dark'; document.body.style.background = '#F5F8FC'; }
+    else { root.setAttribute('data-theme', 'dark'); btn.textContent = 'Light'; document.body.style.background = '#070B14'; }
+  });
+})();
+</script>
+
+</body>
+</html>

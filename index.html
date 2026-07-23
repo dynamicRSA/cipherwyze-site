@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CipherWyze — Enterprise Cryptographic Governance Platform</title>
+  <meta name="description" content="System of record and governance model for managing cryptographic change and post-quantum transition at enterprise scale.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ---- Page-specific premium enhancements ---- */
+    .hero-section {
+      background: #fff;
+      position: relative;
+      overflow: hidden;
+      padding: 0 0 0;
+    }
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: -200px; right: -200px;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(27,111,78,0.06) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .hero-section::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: -100px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(13,148,136,0.05) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 5rem 2rem 0;
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .hero-screenshot-area {
+      padding-top: 1rem;
+      position: relative;
+    }
+    .hero-screenshot-area::before {
+      content: '';
+      position: absolute;
+      inset: -20px;
+      background: linear-gradient(135deg, rgba(27,111,78,0.04), rgba(13,148,136,0.04));
+      border-radius: 2rem;
+      z-index: -1;
+    }
+    /* Stat bar */
+    .stat-bar {
+      background: var(--navy);
+      padding: 1.25rem 2rem;
+    }
+    .stat-bar-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .stat-bar-item {
+      text-align: center;
+      flex: 1;
+      min-width: 120px;
+    }
+    .stat-bar-num {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.03em;
+    }
+    .stat-bar-label {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.5);
+      margin-top: 0.125rem;
+    }
+    .stat-bar-divider {
+      width: 1px;
+      height: 36px;
+      background: rgba(255,255,255,0.1);
+    }
+    /* Section band styles */
+    .band-white { background: #fff; }
+    .band-grey { background: var(--bg); }
+    .band-tint { background: linear-gradient(180deg, #F8F9FC 0%, #EFF6F2 100%); }
+    .band-navy { background: var(--navy); }
+    /* Diagram styles */
+    .rc-stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.25rem 0.625rem 1rem;
+      border-radius: 0.5rem;
+      transition: transform 0.15s, box-shadow 0.15s;
+      cursor: default;
+      position: relative;
+    }
+    .rc-stage:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+    .rc-num {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 800;
+      color: #fff;
+      margin-bottom: 0.625rem;
+      flex-shrink: 0;
+    }
+    .rc-label { font-size: 0.6875rem; font-weight: 700; color: var(--navy); text-align: center; line-height: 1.35; margin-bottom: 0.375rem; }
+    .rc-desc { font-size: 0.5875rem; color: var(--text-3); text-align: center; line-height: 1.5; }
+    /* Phase card */
+    .phase-card {
+      border-radius: 0.625rem;
+      padding: 1.25rem 0.875rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      transition: transform 0.15s;
+    }
+    .phase-card:hover { transform: translateY(-2px); }
+    /* Domain grid */
+    .domain-card {
+      background: var(--bg-white);
+      border: 1px solid var(--border);
+      border-radius: 0.625rem;
+      padding: 1rem;
+      transition: box-shadow 0.15s, transform 0.15s;
+    }
+    .domain-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    /* Bento grid for navigator capabilities */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: auto;
+      gap: 1rem;
+    }
+    .bento-cell {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      transition: background 0.15s;
+    }
+    .bento-cell:hover { background: rgba(255,255,255,0.11); }
+    .bento-cell.span2 { grid-column: span 2; }
+    .bento-cell.tall { grid-row: span 2; }
+    /* App cards */
+    .app-card-v2 {
+      background: var(--bg-white);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .app-card-v2::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--green), var(--teal));
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .app-card-v2:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); border-color: var(--green); }
+    .app-card-v2:hover::after { opacity: 1; }
+    /* Animated hero badge */
+    @keyframes fadeSlideIn { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform: translateY(0); } }
+    .hero-badge-row { display: flex; flex-wrap: wrap; gap: 0.5rem; animation: fadeSlideIn 0.6s ease 0.4s both; }
+
+    @media (max-width: 1024px) {
+      .hero-inner { grid-template-columns: 1fr; }
+      .hero-screenshot-area { display: none; }
+      .bento-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      .bento-grid { grid-template-columns: 1fr; }
+      .bento-cell.span2 { grid-column: span 1; }
+      .stat-bar-divider { display: none; }
+    }
+  </style>
+</head>
+<body>
+<div class="page-wrapper"><div class="page-content">
+
+<!-- ═══════════════ NAV ═══════════════ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><img src="assets/cipherwyze-logo.png" alt="CipherWyze" height="30"></a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link" style="color:var(--navy)">Home</a>
+      <div class="nav-item">
+        <button class="nav-link">Platforms <svg class="chevron" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+        <div class="nav-dropdown">
+          <div class="dd-label">Platforms</div>
+          <a href="navigator.html" class="dd-link"><div class="dd-link-text">Navigator</div><div class="dd-link-sub">Cryptographic governance platform</div></a>
+          <a href="discovery.html" class="dd-link"><div class="dd-link-text">Discovery</div><div class="dd-link-sub">Cryptographic evidence engine</div></a>
+        </div>
+      </div>
+      <div class="nav-item">
+        <button class="nav-link">Applications <svg class="chevron" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+        <div class="nav-dropdown" style="min-width:280px">
+          <div class="dd-label">Applications</div>
+          <a href="cryptographic-inventory.html" class="dd-link"><div class="dd-link-text">Cryptographic Inventory &amp; CBOM</div></a>
+          <a href="post-quantum.html" class="dd-link"><div class="dd-link-text">Post-Quantum Transition</div></a>
+          <a href="grc.html" class="dd-link"><div class="dd-link-text">Cryptographic GRC</div></a>
+        </div>
+      </div>
+      <a href="partners.html" class="nav-link">Partners</a>
+      <a href="contact.html" class="nav-link">Contact</a>
+    </div>
+    <div class="nav-actions">
+      <a href="https://navigator.cipherwyze.com" class="btn btn-ghost btn-sm">Sign in</a>
+      <a href="contact.html" class="btn btn-primary btn-sm">Request a demo</a>
+    </div>
+    <button class="nav-burger" id="nav-burger"><span></span><span></span><span></span></button>
+  </div>
+  <div class="nav-mobile" id="nav-mobile">
+    <a href="index.html" class="nm-link">Home</a>
+    <div class="nm-section-title">Platforms</div>
+    <a href="navigator.html" class="nm-link nm-sub">Navigator</a>
+    <a href="discovery.html" class="nm-link nm-sub">Discovery</a>
+    <div class="nm-section-title">Applications</div>
+    <a href="cryptographic-inventory.html" class="nm-link nm-sub">Cryptographic Inventory &amp; CBOM</a>
+    <a href="post-quantum.html" class="nm-link nm-sub">Post-Quantum Transition</a>
+    <a href="grc.html" class="nm-link nm-sub">Cryptographic GRC</a>
+    <a href="partners.html" class="nm-link">Partners</a>
+    <a href="contact.html" class="nm-link">Contact</a>
+    <div class="nm-actions">
+      <a href="https://navigator.cipherwyze.com" class="btn btn-outline">Sign in</a>
+      <a href="contact.html" class="btn btn-primary">Request a demo</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="hero-section">
+  <div class="hero-inner">
+    <!-- Left: copy -->
+    <div style="padding-top:2rem;padding-bottom:4rem">
+      <div class="s-label aos" style="margin-bottom:1.25rem"><span class="s-label-line"></span>Enterprise Cryptographic Governance Platform</div>
+      <h1 class="aos aos-delay-1" style="font-size:clamp(2.5rem,4.5vw,3.75rem);margin-bottom:1.5rem">
+        Govern cryptographic change before it becomes operational disruption.
+      </h1>
+      <p class="lead aos aos-delay-2" style="margin-bottom:2rem;max-width:520px">
+        The hard part isn't choosing an algorithm. It's knowing what you use, where it sits, who owns it, and how to change it without breaking the business.<br><br>CipherWyze is the system of record, governance model and programme execution platform for enterprise-scale cryptographic transformation.
+      </p>
+      <div class="aos aos-delay-2" style="display:flex;gap:0.875rem;flex-wrap:wrap;margin-bottom:2.5rem">
+        <a href="contact.html" class="btn btn-primary btn-lg">Request a Navigator demo</a>
+        <a href="navigator.html" class="btn btn-outline btn-lg">Explore Navigator</a>
+      </div>
+      <div class="hero-badge-row aos aos-delay-3">
+        <span class="hero-badge">Post-Quantum Cryptography</span>
+        <span class="hero-badge">TLS Modernisation</span>
+        <span class="hero-badge">Certificate Governance</span>
+        <span class="hero-badge">Cryptographic Agility</span>
+        <span class="hero-badge">Digital Operational Resilience</span>
+      </div>
+    </div>
+    <!-- Right: platform screenshot -->
+    <div class="hero-screenshot-area aos aos-delay-2">
+      <div style="border-radius:1.25rem;overflow:hidden;box-shadow:0 24px 80px rgba(15,26,46,0.18),0 8px 24px rgba(15,26,46,0.1);border:1px solid var(--border);transform:perspective(900px) rotateY(-3deg) rotateX(1.5deg)">
+        <img src="assets/navigator-dashboard.webp" alt="Navigator Executive Command Centre — real cryptographic governance dashboard">
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- ═══════════════ SECTION 01 — REALITY CURVE ═══════════════ -->
+<section class="band-white" style="padding:5rem 2rem">
+  <div class="section-inner">
+    <!-- Header: editorial layout -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:end;margin-bottom:3rem" class="aos">
+      <div>
+        <div class="s-label" style="margin-bottom:1rem"><span class="s-label-line"></span>01 — The Reality Curve</div>
+        <h2>Cryptographic transitions become customer-impacting operational events.</h2>
+      </div>
+      <div>
+        <p style="margin-bottom:1rem">When cryptographic change is not coordinated early, organisations are forced into reactive migrations under pressure. The SHA-1 certificate transition demonstrated what happens when cryptographic change reaches enforcement deadlines before organisations and customers are ready.</p>
+        <p>This pattern repeats with every major cryptographic transition — and the post-quantum transition is orders of magnitude larger in scope.</p>
+      </div>
+    </div>
+
+    <!-- THE DIAGRAM: Interactive PQC Readiness Curve (iframe, auto-resizes to content) -->
+    <div class="aos" style="border-radius:1.25rem;overflow:hidden;box-shadow:var(--shadow-sm);border:1px solid var(--border)">
+      <iframe
+        id="pqc-curve-frame"
+        src="pqc-readiness-curve-diagram.html"
+        title="The PQC Readiness Curve — 9 stages of organisational response to post-quantum cryptography"
+        scrolling="no"
+        style="width:100%;border:none;display:block;min-height:820px"
+      ></iframe>
+      <script>
+        (function(){
+          var frame = document.getElementById('pqc-curve-frame');
+          function resize() {
+            try {
+              var h = frame.contentDocument.documentElement.scrollHeight;
+              if (h > 0) frame.style.height = h + 'px';
+            } catch(e) {}
+          }
+          frame.addEventListener('load', function() {
+            resize();
+            // Re-check after animations complete
+            setTimeout(resize, 800);
+            setTimeout(resize, 2200);
+          });
+        })();
+      </script>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ SECTION 02 — TRANSITION WINDOW ═══════════════ -->
+<section class="band-tint" style="padding:5rem 2rem">
+  <div class="section-inner">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:end;margin-bottom:3rem" class="aos">
+      <div>
+        <div class="s-label" style="margin-bottom:1rem"><span class="s-label-line"></span>02 — The Transition Window</div>
+        <h2>The challenge is executing cryptographic change safely at enterprise scale.</h2>
+      </div>
+      <div>
+        <p style="margin-bottom:1.25rem">Most organisations underestimate the time required to inventory, prioritise, validate, coordinate, migrate and evidence cryptographic change. Late starts compress execution windows and significantly increase delivery risk.</p>
+        <div class="pullquote">
+          <p>"Cryptographic transitions fail operationally before they fail mathematically."</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- THE DIAGRAM: Transition Window (iframe embed) -->
+    <div class="aos" style="border-radius:1.25rem;overflow:hidden;box-shadow:var(--shadow-md)">
+      <iframe
+        id="transition-frame"
+        src="transition-window-2026-v6.html"
+        title="The Long Transition Window — PQC programme phases 2026–2035"
+        scrolling="no"
+        style="width:100%;border:none;display:block;min-height:640px"
+      ></iframe>
+      <script>
+        (function(){
+          var frame = document.getElementById('transition-frame');
+          function resize() {
+            try {
+              var h = frame.contentDocument.documentElement.scrollHeight;
+              if (h > 0) frame.style.height = h + 'px';
+            } catch(e) {}
+          }
+          frame.addEventListener('load', function() {
+            resize();
+            setTimeout(resize, 400);
+            setTimeout(resize, 1200);
+          });
+        })();
+      </script>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ SECTION 03 — ENTERPRISE SCOPE ═══════════════ -->
+<section class="band-white" style="padding:5rem 2rem">
+  <div class="section-inner">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:end;margin-bottom:3rem" class="aos">
+      <div>
+        <div class="s-label" style="margin-bottom:1rem"><span class="s-label-line"></span>03 — Enterprise Cryptographic Transformation</div>
+        <h2>Cryptographic change extends across the entire enterprise technology estate.</h2>
+      </div>
+      <div>
+        <p style="margin-bottom:1rem">It impacts identities, certificates, protocols, APIs, cloud infrastructure, software delivery pipelines, suppliers, operational technology, embedded systems and long-lived data.</p>
+        <p>The objective is not simply to replace algorithms. The objective is to govern enterprise-wide cryptographic transformation.</p>
+      </div>
+    </div>
+
+    <!-- THE DIAGRAM: Enterprise Cryptographic Estate — interactive hub & spoke (iframe) -->
+    <div class="aos" style="border-radius:1.25rem;overflow:hidden;box-shadow:var(--shadow-md)">
+      <iframe
+        id="estate-frame"
+        src="cryptographic-estate.html"
+        title="Enterprise Cryptographic Transformation — 10 domains of the cryptographic estate"
+        scrolling="no"
+        style="width:100%;border:none;display:block;min-height:780px"
+      ></iframe>
+      <script>
+        (function(){
+          var frame = document.getElementById('estate-frame');
+          function resize() {
+            try {
+              var h = frame.contentDocument.documentElement.scrollHeight;
+              if (h > 0) frame.style.height = h + 'px';
+            } catch(e) {}
+          }
+          frame.addEventListener('load', function() {
+            /* Hide the demo theme toggle — not needed in marketing context */
+            try {
+              var btn = frame.contentDocument.getElementById('cxTheme');
+              if (btn) btn.style.display = 'none';
+            } catch(e) {}
+            resize();
+            setTimeout(resize, 500);
+            setTimeout(resize, 1500);
+          });
+        })();
+      </script>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ SECTION 04 — NAVIGATOR (dark) ═══════════════ -->
+<section class="band-navy" style="padding:5rem 2rem">
+  <div class="section-inner">
+    <!-- Header -->
+    <div style="text-align:center;max-width:700px;margin:0 auto 4rem" class="aos">
+      <div class="s-label" style="justify-content:center;color:#6EE7B7"><span class="s-label-line" style="background:#6EE7B7"></span>04 — Navigator</div>
+      <h2 style="color:#fff;margin-top:0.75rem">The system of record for cryptographic transformation.</h2>
+      <p style="color:rgba(255,255,255,0.65);margin-top:1rem;max-width:560px;margin-left:auto;margin-right:auto">Navigator transforms cryptographic change from a technical challenge into a governed business programme — combining inventory, governance, programme execution and evidence management in a single platform.</p>
+      <div style="display:flex;justify-content:center;gap:1rem;margin-top:2rem;flex-wrap:wrap">
+        <a href="contact.html" class="btn btn-primary btn-lg">Request a Navigator demo</a>
+        <a href="https://navigator.cipherwyze.com" class="btn btn-outline btn-lg" style="border-color:rgba(255,255,255,0.25);color:#fff">Sign in to Navigator</a>
+      </div>
+    </div>
+
+    <!-- Bento grid -->
+    <div class="bento-grid aos aos-delay-1">
+      <!-- Discover -->
+      <div class="bento-cell tall">
+        <div style="font-size:0.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#6EE7B7;margin-bottom:1rem">Discover</div>
+        <h4 style="color:#fff;font-size:1.125rem;margin-bottom:1.25rem">Know what you have.</h4>
+        <ul style="display:flex;flex-direction:column;gap:0.625rem">
+          <li style="font-size:0.875rem;color:rgba(255,255,255,0.65);display:flex;gap:0.5rem"><span style="color:#6EE7B7;flex-shrink:0">▸</span>Cryptographic assets</li>
+          <li style="font-size:0.875rem;color:rgba(255,255,255,0.65);display:flex;gap:0.5rem"><span style="color:#6EE7B7;flex-shrink:0">▸</span>Algorithms and protocols</li>
+          <li style="font-size:0.875rem;color:rgba(255,255,255,0.65);display:flex;gap:0.5rem"><span style="color:#6EE7B7;flex-shrink:0">▸</span>Certificates and PKI dependencies</li>
+          <li style="font-size:0.875rem;color:rgba(255,255,255,0.65);display:flex;gap:0.5rem"><span style="color:#6EE7B7;flex-shrink:0">▸</span>Software and supplier dependencies</li>
+          <li style="font-size:0.875rem;color:rgba(255,255,255,0.65);display:flex;gap:0.5rem"><span style="color:#6EE7B7;flex-shrink:0">▸</span>System and application ownership</li>
+          <li style="font-size:0.875rem;color:rgba(255,255,255,0.65);display:flex;gap:0.5rem"><span style="color:#6EE7B7;flex-shrink:0">▸</span>Exposure and readiness context</li>
+          <li style="font-size:0.875rem;color:rgba(255,255,255,0.65);display:flex;gap:0.5rem"><span style="color:#6EE7B7;flex-shrink:0">▸</span>CBOM and discovery inputs</li>
+        </ul>
+      </div>
+      <!-- Govern -->
+      <div class="bento-cell tall">
+        <div style="font-size:0.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#6EE7B7;margin-bottom:1rem">Govern</div>
+        <h4 style="color:#fff;font-size:1.125rem;margin-bottom:1.25rem">Coordinate cryptographic change.</h4>
+        <ul style="display:flex;flex-direction:column;gap:0.625rem">
+          <li style="font-size:0.875rem;color:rgba(255,255,255,0.65);display:flex;gap:0.5rem"><span style="color:#6EE7B7;flex-shrink:0">▸</span>Programme scope and inclusion decisions</li>
+          <li style="font-size:0.875rem;color:rgba(255,255,255,0.65);display:flex;gap:0.5rem"><span style="color:#6EE7B7;flex-shrink:0">▸</span>Ownership assignment</li>
+          <li style="font-size:0.875rem;color:rgba(255,255,255,0.65);display:flex;gap:0.5rem"><span style="color:#6EE7B7;flex-shrink:0">▸</span>Prioritisation</li>
+          <li style="font-size:0.875rem;color:rgba(255,255,255,0.65);display:flex;gap:0.5rem"><span style="color:#6EE7B7;flex-shrink:0">▸</span>Remediation planning</li>
+          <li style="font-size:0.875rem;color:rgba(255,255,255,0.65);display:flex;gap:0.5rem"><span style="color:#6EE7B7;flex-shrink:0">▸</span>Policy and standards alignment</li>
+          <li style="font-size:0.875rem;color:rgba(255,255,255,0.65);display:flex;gap:0.5rem"><span style="color:#6EE7B7;flex-shrink:0">▸</span>Lifecycle-driven governance</li>
+          <li style="font-size:0.875rem;color:rgba(255,255,255,0.65);display:flex;gap:0.5rem"><span style="color:#6EE7B7;flex-shrink:0">▸</span>Review and decision tracking</li>
+        </ul>
+      </div>
+      <!-- Evidence -->
+      <div class="bento-cell tall">
+        <div style="font-size:0.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#6EE7B7;margin-bottom:1rem">Evidence</div>
+        <h4 style="color:#fff;font-size:1.125rem;margin-bottom:1.25rem">Demonstrate progress.</h4>
+        <ul style="display:flex;flex-direction:column;gap:0.625rem">
+          <li style="font-size:0.875rem;color:rgba(255,255,255,0.65);display:flex;gap:0.5rem"><span style="color:#6EE7B7;flex-shrink:0">▸</span>Programme reporting</li>
+          <li style="font-size:0.875rem;color:rgba(255,255,255,0.65);display:flex;gap:0.5rem"><span style="color:#6EE7B7;flex-shrink:0">▸</span>Audit-ready evidence records</li>
+          <li style="font-size:0.875rem;color:rgba(255,255,255,0.65);display:flex;gap:0.5rem"><span style="color:#6EE7B7;flex-shrink:0">▸</span>Executive dashboards</li>
+          <li style="font-size:0.875rem;color:rgba(255,255,255,0.65);display:flex;gap:0.5rem"><span style="color:#6EE7B7;flex-shrink:0">▸</span>Remediation status tracking</li>
+          <li style="font-size:0.875rem;color:rgba(255,255,255,0.65);display:flex;gap:0.5rem"><span style="color:#6EE7B7;flex-shrink:0">▸</span>Readiness and maturity views</li>
+          <li style="font-size:0.875rem;color:rgba(255,255,255,0.65);display:flex;gap:0.5rem"><span style="color:#6EE7B7;flex-shrink:0">▸</span>Decision history</li>
+          <li style="font-size:0.875rem;color:rgba(255,255,255,0.65);display:flex;gap:0.5rem"><span style="color:#6EE7B7;flex-shrink:0">▸</span>Reporting packs for stakeholders</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Capability list -->
+    <div class="aos" style="margin-top:1.5rem;display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem">
+      <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:0.75rem;padding:1.125rem;font-size:0.9rem;color:rgba(255,255,255,0.65)">Establish a cryptographic inventory and CBOM-informed operating view</div>
+      <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:0.75rem;padding:1.125rem;font-size:0.9rem;color:rgba(255,255,255,0.65)">Map cryptographic assets to systems, suppliers, owners and business services</div>
+      <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:0.75rem;padding:1.125rem;font-size:0.9rem;color:rgba(255,255,255,0.65)">Prioritise remediation and transition activity by exposure and criticality</div>
+      <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:0.75rem;padding:1.125rem;font-size:0.9rem;color:rgba(255,255,255,0.65)">Track standards, policy and regulatory alignment</div>
+      <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:0.75rem;padding:1.125rem;font-size:0.9rem;color:rgba(255,255,255,0.65)">Coordinate remediation work across responsible teams</div>
+      <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:0.75rem;padding:1.125rem;font-size:0.9rem;color:rgba(255,255,255,0.65)">Capture evidence for boards, auditors, regulators and customers</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ APPLICATIONS ═══════════════ -->
+<section class="band-grey" style="padding:5rem 2rem">
+  <div class="section-inner">
+    <div style="text-align:center;max-width:640px;margin:0 auto 3.5rem" class="aos">
+      <div class="s-label" style="justify-content:center"><span class="s-label-line"></span>Applications</div>
+      <h2 style="margin-top:0.75rem">Built for every cryptographic governance use case.</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem" class="aos aos-delay-1">
+      <a href="cryptographic-inventory.html" class="app-card-v2">
+        <div style="width:44px;height:44px;border-radius:0.625rem;background:var(--green-light);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h3.5l2 2H19a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M3 11h18"/></svg></div>
+        <div style="font-size:0.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--green);margin-bottom:0.5rem">Application</div>
+        <h4 style="margin-bottom:0.75rem">Cryptographic Inventory &amp; CBOM</h4>
+        <p style="font-size:0.9rem;flex:1">Turn cryptographic inventory and CBOM inputs into a governed operating view for risk, ownership and remediation.</p>
+        <div style="margin-top:1.5rem;color:var(--green);font-size:0.875rem;font-weight:700">Explore →</div>
+      </a>
+      <a href="post-quantum.html" class="app-card-v2">
+        <div style="width:44px;height:44px;border-radius:0.625rem;background:#EFF6FF;display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></div>
+        <div style="font-size:0.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#1D4ED8;margin-bottom:0.5rem">Application</div>
+        <h4 style="margin-bottom:0.75rem">Post-Quantum Transition</h4>
+        <p style="font-size:0.9rem;flex:1">Structure and govern the PQC transition as an enterprise programme — not a series of isolated technical projects.</p>
+        <div style="margin-top:1.5rem;color:#1D4ED8;font-size:0.875rem;font-weight:700">Explore →</div>
+      </a>
+      <a href="grc.html" class="app-card-v2">
+        <div style="width:44px;height:44px;border-radius:0.625rem;background:#FDF4FF;display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6D28D9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h7l2 3 2-3h7v4l-2 2 2 2v4l-2 2 2 2v4H3v-4l2-2-2-2v-4l2-2-2-2z"/><path d="M12 3v18"/></svg></div>
+        <div style="font-size:0.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#6D28D9;margin-bottom:0.5rem">Application</div>
+        <h4 style="margin-bottom:0.75rem">Cryptographic GRC</h4>
+        <p style="font-size:0.9rem;flex:1">A cryptography-specific governance, risk and evidence layer for enterprise transformation programmes.</p>
+        <div style="margin-top:1.5rem;color:#6D28D9;font-size:0.875rem;font-weight:700">Explore →</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ PLATFORMS ═══════════════ -->
+<section class="band-white" style="padding:5rem 2rem;border-top:1px solid var(--border)">
+  <div class="section-inner">
+    <div style="text-align:center;max-width:640px;margin:0 auto 3.5rem" class="aos">
+      <div class="s-label" style="justify-content:center"><span class="s-label-line"></span>Platforms</div>
+      <h2 style="margin-top:0.75rem">Navigator and Discovery. One connected system.</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem" class="aos aos-delay-1">
+      <a href="navigator.html" style="display:block;background:linear-gradient(135deg,#F0FDF9 0%,#D1FAE5 100%);border:1px solid #A7F3D0;border-radius:1.25rem;padding:2.25rem;transition:box-shadow 0.2s,transform 0.2s">
+        <div style="font-size:0.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--green);margin-bottom:1.25rem">Navigator Platform</div>
+        <h3 style="margin-bottom:0.875rem">The governance platform for cryptographic transformation.</h3>
+        <p style="font-size:0.9375rem;color:var(--text-2)">Navigator is the system of record. It provides cryptographic inventory, asset ownership, programme governance, remediation tracking and evidence management in a single operating record.</p>
+        <div style="margin-top:1.5rem;color:var(--green);font-weight:700;font-size:0.9375rem">Explore Navigator →</div>
+      </a>
+      <a href="discovery.html" style="display:block;background:linear-gradient(135deg,#F0FDFD 0%,#CCFBF1 100%);border:1px solid #99F6E4;border-radius:1.25rem;padding:2.25rem;transition:box-shadow 0.2s,transform 0.2s">
+        <div style="font-size:0.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal);margin-bottom:1.25rem">Discovery Engine</div>
+        <h3 style="margin-bottom:0.875rem">The evidence engine for cryptographic inventory.</h3>
+        <p style="font-size:0.9375rem;color:var(--text-2)">Discovery provides continuous cryptographic evidence collection from scanners, PKI systems, cloud platforms, CBOM pipelines and manual inputs — feeding directly into Navigator.</p>
+        <div style="margin-top:1.5rem;color:var(--teal);font-weight:700;font-size:0.9375rem">Explore Discovery →</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ CTA ═══════════════ -->
+<section class="cta-section">
+  <div class="cta-inner aos">
+    <div class="s-label" style="justify-content:center;color:#6EE7B7"><span class="s-label-line" style="background:#6EE7B7"></span>Get Started</div>
+    <h2 style="color:#fff;margin-top:0.75rem">Start your cryptographic governance programme today.</h2>
+    <p>Request a Navigator demo to see how CipherWyze can support your cryptographic transformation programme.</p>
+    <div class="cta-actions">
+      <a href="contact.html" class="btn btn-primary btn-lg">Request a Navigator demo</a>
+      <a href="partners.html" class="btn btn-outline btn-lg" style="border-color:rgba(255,255,255,0.3);color:#fff">Partner with CipherWyze</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="index.html"><img src="assets/cipherwyze-logo.png" alt="CipherWyze" height="28" style="filter:brightness(0) invert(1);opacity:0.85"></a>
+      <p class="footer-brand-desc">The enterprise cryptographic governance platform. Navigator is the system of record for cryptographic transformation at enterprise scale.</p>
+    </div>
+    <div class="footer-col"><h6>Platform</h6><ul><li><a href="navigator.html">Navigator</a></li><li><a href="discovery.html">Discovery</a></li></ul></div>
+    <div class="footer-col"><h6>Applications</h6><ul><li><a href="cryptographic-inventory.html">Cryptographic Inventory &amp; CBOM</a></li><li><a href="post-quantum.html">Post-Quantum Transition</a></li><li><a href="grc.html">Cryptographic GRC</a></li></ul></div>
+    <div class="footer-col"><h6>Company</h6><ul><li><a href="partners.html">Partners</a></li><li><a href="contact.html">Contact</a></li><li><a href="https://navigator.cipherwyze.com">Sign in</a></li></ul></div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2024 CipherWyze. All rights reserved.</div>
+    <a href="contact.html" class="btn btn-primary btn-sm">Request a Navigator demo</a>
+  </div>
+</footer>
+
+</div></div>
+<script>
+// Mobile nav
+const burger = document.getElementById('nav-burger');
+const mobileNav = document.getElementById('nav-mobile');
+if (burger) { burger.addEventListener('click', () => { burger.classList.toggle('open'); mobileNav.classList.toggle('open'); }); }
+// Scroll animations
+const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); observer.unobserve(e.target); } }); }, { threshold: 0.06, rootMargin: '0px 0px -30px 0px' });
+document.querySelectorAll('.aos').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

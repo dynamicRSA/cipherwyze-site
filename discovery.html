@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discovery | CipherWyze Cryptographic Discovery Engine</title>
+  <meta name="description" content="Find cryptography across the enterprise, measure what has not been examined, and deliver normalised evidence into Navigator.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="page-wrapper"><div class="page-content">
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><img src="assets/cipherwyze-logo.png" alt="CipherWyze" height="32"></a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <div class="nav-item"><button class="nav-link">Platforms <svg class="chevron" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button><div class="nav-dropdown"><div class="dd-label">Platforms</div><a href="navigator.html" class="dd-link"><div><div class="dd-link-text">Navigator</div><div class="dd-link-sub">Cryptographic governance platform</div></div></a><a href="discovery.html" class="dd-link"><div><div class="dd-link-text">Discovery</div><div class="dd-link-sub">Cryptographic evidence engine</div></div></a></div></div>
+      <div class="nav-item"><button class="nav-link">Applications <svg class="chevron" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button><div class="nav-dropdown" style="min-width:280px"><div class="dd-label">Applications</div><a href="cryptographic-inventory.html" class="dd-link"><div><div class="dd-link-text">Cryptographic Inventory &amp; CBOM</div></div></a><a href="post-quantum.html" class="dd-link"><div><div class="dd-link-text">Post-Quantum Transition</div></div></a><a href="grc.html" class="dd-link"><div><div class="dd-link-text">Cryptographic GRC</div></div></a></div></div>
+      <a href="partners.html" class="nav-link">Partners</a>
+      <a href="contact.html" class="nav-link">Contact</a>
+    </div>
+    <div class="nav-actions"><a href="https://navigator.cipherwyze.com" class="btn btn-ghost btn-sm">Sign in</a><a href="contact.html" class="btn btn-primary btn-sm">Request a demo</a></div>
+    <button class="nav-burger" id="nav-burger"><span></span><span></span><span></span></button>
+  </div>
+  <div class="nav-mobile" id="nav-mobile">
+    <a href="index.html" class="nm-link">Home</a>
+    <div class="nm-section-title">Platforms</div><a href="navigator.html" class="nm-link nm-sub">Navigator</a><a href="discovery.html" class="nm-link nm-sub">Discovery</a>
+    <div class="nm-section-title">Applications</div><a href="cryptographic-inventory.html" class="nm-link nm-sub">Cryptographic Inventory &amp; CBOM</a><a href="post-quantum.html" class="nm-link nm-sub">Post-Quantum Transition</a><a href="grc.html" class="nm-link nm-sub">Cryptographic GRC</a>
+    <a href="partners.html" class="nm-link">Partners</a><a href="contact.html" class="nm-link">Contact</a>
+    <div class="nm-actions"><a href="https://navigator.cipherwyze.com" class="btn btn-outline">Sign in</a><a href="contact.html" class="btn btn-primary">Request a demo</a></div>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="s-label"><span class="s-label-line"></span>Platform · Discovery</div>
+    <h1>Find cryptography across the enterprise. Measure what remains unseen.</h1>
+    <p class="lead">Discovery collects cryptographic evidence across networks, PKI, code, cloud, endpoints and hardware — then hands normalised evidence to Navigator for governance.</p>
+    <div style="display:flex;gap:1rem;flex-wrap:wrap">
+      <a href="contact.html" class="btn btn-primary btn-lg">Discuss Discovery</a>
+      <a href="navigator.html" class="btn btn-outline btn-lg">Explore Navigator</a>
+    </div>
+  </div>
+</div>
+
+<!-- COLLECTION DOMAINS -->
+<section class="section">
+  <div style="max-width:var(--max-w);margin:0 auto">
+    <div class="aos" style="max-width:680px;margin-bottom:3.5rem">
+      <div class="s-label"><span class="s-label-line"></span>Collection Domains</div>
+      <h2>Nineteen evidence-producing collection methods across four domains.</h2>
+      <p style="margin-top:1.25rem">Discovery combines nineteen evidence-producing collection methods across four domains. CMDB and IAM context form a twentieth input, adding ownership and the denominator needed to measure coverage.</p>
+    </div>
+    <div class="grid g4 aos aos-delay-1">
+      <div class="card">
+        <div style="width:48px;height:48px;border-radius:var(--radius);background:rgba(6,200,232,0.1);border:1px solid rgba(6,200,232,0.2);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#06C8E8" stroke-width="1.5" opacity="0.5"/><circle cx="12" cy="12" r="4" stroke="#06C8E8" stroke-width="1.5"/><line x1="3" y1="12" x2="21" y2="12" stroke="#06C8E8" stroke-width="1" opacity="0.4"/></svg>
+        </div>
+        <h4>Network</h4>
+        <p style="margin-top:0.75rem;font-size:0.9rem">Active and passive network evidence, runtime observation, configuration, telemetry and protocol-specific probes.</p>
+      </div>
+      <div class="card">
+        <div style="width:48px;height:48px;border-radius:var(--radius);background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.2);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2L4 6.5V12c0 5.25 3.8 9.75 8 11.5C17.2 21.75 21 17.25 21 12V6.5L12 2Z" stroke="#8B5CF6" stroke-width="1.5"/><circle cx="12" cy="12" r="3" fill="#8B5CF6" opacity="0.4"/></svg>
+        </div>
+        <h4>PKI and Identity</h4>
+        <p style="margin-top:0.75rem;font-size:0.9rem">Certificate estates, trust chains, signing material and third-party attestations.</p>
+      </div>
+      <div class="card">
+        <div style="width:48px;height:48px;border-radius:var(--radius);background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="#10B981" stroke-width="1.5"/><path d="M7 9l3 3-3 3M13 15h4" stroke="#10B981" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <h4>Code and Artefacts</h4>
+        <p style="margin-top:0.75rem;font-size:0.9rem">Source, dependencies, binaries, firmware and container images examined before and during runtime.</p>
+      </div>
+      <div class="card">
+        <div style="width:48px;height:48px;border-radius:var(--radius);background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="7" width="20" height="14" rx="2" stroke="#F59E0B" stroke-width="1.5"/><path d="M16 7V5a2 2 0 00-4 0v2M8 7V5a2 2 0 00-4 0" stroke="#F59E0B" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/><path d="M8 12h8M8 16h5" stroke="#F59E0B" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/></svg>
+        </div>
+        <h4>Keys and Infrastructure</h4>
+        <p style="margin-top:0.75rem;font-size:0.9rem">Endpoints, cloud control planes, vaults, HSMs, databases, mainframes and legacy platforms.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PIPELINE FLOW -->
+<section class="section" style="background:var(--bg-surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div style="max-width:var(--max-w);margin:0 auto">
+    <div class="aos" style="text-align:center;max-width:640px;margin:0 auto 3.5rem">
+      <div class="s-label" style="justify-content:center"><span class="s-label-line"></span>Evidence Pipeline</div>
+      <h2>From estate signals to governed risk and action.</h2>
+      <p style="margin-top:1.25rem">Discovery collects and normalises observations. Navigator correlates repeated sightings, adds ownership, maintains the system of record and turns evidence into risk and action.</p>
+    </div>
+    <div class="aos aos-delay-1">
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-xl);padding:2.5rem">
+        <div class="flow">
+          <div class="flow-step">
+            <div class="flow-icon" style="background:rgba(6,200,232,0.1);border:1px solid rgba(6,200,232,0.2)">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#06C8E8" stroke-width="1.5" opacity="0.5"/><circle cx="12" cy="12" r="4" fill="#06C8E8" opacity="0.6"/></svg>
+            </div>
+            <div class="flow-label">Sources</div>
+            <div class="flow-sub">Estate signals</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <div class="flow-icon" style="background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.2)">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#8B5CF6" stroke-width="1.5"/><line x1="16" y1="16" x2="21" y2="21" stroke="#8B5CF6" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </div>
+            <div class="flow-label">Collect</div>
+            <div class="flow-sub">Purpose-built methods</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <div class="flow-icon" style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2)">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 10h12M4 14h10M4 18h6" stroke="#10B981" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </div>
+            <div class="flow-label">Normalise</div>
+            <div class="flow-sub">CycloneDX 1.6</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <div class="flow-icon" style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2)">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="9" r="4" stroke="#F59E0B" stroke-width="1.5"/><circle cx="16" cy="15" r="4" stroke="#F59E0B" stroke-width="1.5" opacity="0.5"/><line x1="12" y1="11" x2="13" y2="12" stroke="#F59E0B" stroke-width="1.5"/></svg>
+            </div>
+            <div class="flow-label">Correlate</div>
+            <div class="flow-sub">Deduplicate &amp; enrich</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <div class="flow-icon" style="background:rgba(6,200,232,0.1);border:1px solid rgba(6,200,232,0.2)">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" fill="#06C8E8" opacity="0.7"/><rect x="14" y="3" width="7" height="7" rx="1" fill="#06C8E8" opacity="0.4"/><rect x="3" y="14" width="7" height="7" rx="1" fill="#06C8E8" opacity="0.4"/><rect x="14" y="14" width="7" height="7" rx="1" fill="#06C8E8" opacity="0.6"/></svg>
+            </div>
+            <div class="flow-label">Inventory</div>
+            <div class="flow-sub">Governed system of record</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <div class="flow-icon" style="background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.2)">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M3 18l4-8 4 5 3-3 5 6" stroke="#8B5CF6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="flow-label">Outcomes</div>
+            <div class="flow-sub">Risk, roadmap &amp; reporting</div>
+          </div>
+        </div>
+        <div style="background:rgba(6,200,232,0.05);border:1px solid rgba(6,200,232,0.12);border-radius:var(--radius);padding:1rem;margin-top:1.5rem;font-size:0.875rem;color:var(--text-2)">
+          The handover is a <strong style="color:var(--text)">CycloneDX 1.6 document</strong> carrying the observation, provenance, time and confidence. Discovery does not maintain a competing inventory of its own.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEPLOYMENT MODES -->
+<section class="section">
+  <div style="max-width:var(--max-w);margin:0 auto">
+    <div class="aos" style="text-align:center;max-width:640px;margin:0 auto 3.5rem">
+      <div class="s-label" style="justify-content:center"><span class="s-label-line"></span>Deployment</div>
+      <h2>Flexible deployment for any security boundary.</h2>
+      <p style="margin-top:1.25rem">The engine can run in CipherWyze cloud, inside your tenancy or fully isolated. A Runner placed in each unreachable zone performs collection locally and dials out over 443 — without an inbound port or stored target credentials.</p>
+    </div>
+    <div class="grid g3 aos aos-delay-1">
+      <div class="card" style="border-color:rgba(6,200,232,0.2)">
+        <div style="width:44px;height:44px;border-radius:var(--radius);background:rgba(6,200,232,0.1);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M3 14.5C1.9 13.6 1 12.3 1 11c0-3.3 4.5-6 10-6s10 2.7 10 6-4.5 6-10 6" stroke="#06C8E8" stroke-width="1.5" stroke-linecap="round"/><circle cx="11" cy="11" r="3" fill="#06C8E8" opacity="0.5"/></svg>
+        </div>
+        <h4>In Our Cloud</h4>
+        <p style="margin-top:0.75rem;font-size:0.9rem">CipherWyze hosts the engine. Runners provide controlled reach into internal zones where required.</p>
+        <div class="badge badge-cyan" style="margin-top:1.25rem">Fastest to deploy</div>
+      </div>
+      <div class="card" style="border-color:rgba(139,92,246,0.2)">
+        <div style="width:44px;height:44px;border-radius:var(--radius);background:rgba(139,92,246,0.1);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="6" width="18" height="12" rx="2" stroke="#8B5CF6" stroke-width="1.5"/><path d="M7 6V4a4 4 0 018 0v2" stroke="#8B5CF6" stroke-width="1.5" opacity="0.5"/></svg>
+        </div>
+        <h4>In Your Tenancy</h4>
+        <p style="margin-top:0.75rem;font-size:0.9rem">The engine runs inside your cloud boundary, with normalised evidence handed to Navigator.</p>
+        <div class="badge badge-purple" style="margin-top:1.25rem">Sovereign boundary</div>
+      </div>
+      <div class="card" style="border-color:rgba(16,185,129,0.2)">
+        <div style="width:44px;height:44px;border-radius:var(--radius);background:rgba(16,185,129,0.1);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="9" stroke="#10B981" stroke-width="1.5"/><path d="M11 7v8M7 11h8" stroke="#10B981" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/></svg>
+        </div>
+        <h4>Fully Isolated</h4>
+        <p style="margin-top:0.75rem;font-size:0.9rem">The engine and runners operate inside the estate, with evidence exported for governed import.</p>
+        <div class="badge badge-emerald" style="margin-top:1.25rem">Air-gapped capable</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OPERATIONAL CONTROLS -->
+<section class="section" style="background:var(--bg-surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div style="max-width:var(--max-w);margin:0 auto">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start">
+      <div class="aos">
+        <div class="s-label"><span class="s-label-line"></span>Controls</div>
+        <h2>Operational controls built into every scan.</h2>
+        <p style="margin-top:1.25rem">Controls are evaluated in the pipeline at dispatch time, then recorded against the scan so teams can show what ran, when, on whose authority and what it could touch.</p>
+      </div>
+      <div class="aos aos-delay-2">
+        <div class="steps">
+          <div class="step"><div class="step-circle"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div class="step-body"><h5>Window</h5><p>Run only inside an approved maintenance window</p></div></div>
+          <div class="step"><div class="step-circle"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="step-body"><h5>Safe Mode</h5><p>Restrict sensitive targets to permitted collection methods</p></div></div>
+          <div class="step"><div class="step-circle"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></div><div class="step-body"><h5>Authorisation</h5><p>Require named approval before active production scans</p></div></div>
+          <div class="step"><div class="step-circle"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="3.5"/><path d="M21 2l-9.6 9.6M15.5 7.5l3 3"/></svg></div><div class="step-body"><h5>Credentials</h5><p>Dispatch only with a valid, least-privilege credential reference</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COVERAGE MEASUREMENT -->
+<section class="section">
+  <div style="max-width:var(--max-w);margin:0 auto;text-align:center">
+    <div class="aos" style="max-width:680px;margin:0 auto">
+      <div class="s-label" style="justify-content:center"><span class="s-label-line"></span>Coverage Insight</div>
+      <h2>What was never examined matters as much as what was found.</h2>
+      <p style="margin-top:1.25rem">A scanner can report its findings. Discovery compares examined assets with the estate known through CMDB and PKI context, making the unexamined population visible and measurable.</p>
+      <div style="margin-top:3rem;display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center">
+        <div style="flex:1;min-width:180px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2rem;text-align:center">
+          <div style="font-size:2.5rem;font-weight:800;color:var(--cyan);line-height:1">19</div>
+          <div style="font-size:0.875rem;color:var(--text-2);margin-top:0.5rem">Evidence-producing collection methods</div>
+        </div>
+        <div style="flex:1;min-width:180px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2rem;text-align:center">
+          <div style="font-size:2.5rem;font-weight:800;color:var(--purple);line-height:1">4</div>
+          <div style="font-size:0.875rem;color:var(--text-2);margin-top:0.5rem">Collection domains across the estate</div>
+        </div>
+        <div style="flex:1;min-width:180px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2rem;text-align:center">
+          <div style="font-size:2.5rem;font-weight:800;color:var(--emerald);line-height:1">1</div>
+          <div style="font-size:0.875rem;color:var(--text-2);margin-top:0.5rem">Normalised handover: CycloneDX 1.6</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" style="background:var(--bg-surface);border-top:1px solid var(--border)">
+  <div class="cta-glow"></div>
+  <div class="cta-inner aos">
+    <div class="s-label" style="justify-content:center"><span class="s-label-line"></span>Next Step</div>
+    <h2>See what your current tools can find — and what remains unseen.</h2>
+    <p>Talk to CipherWyze about Discovery coverage, deployment options and the handover into Navigator's governed cryptographic inventory.</p>
+    <div class="cta-actions">
+      <a href="contact.html" class="btn btn-primary btn-lg">Discuss CipherWyze Discovery</a>
+      <a href="navigator.html" class="btn btn-outline btn-lg">Explore Navigator</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand"><a href="index.html" class="footer-logo"><img src="assets/cipherwyze-logo.png" alt="CipherWyze" height="28" style="filter:brightness(0) invert(1);opacity:0.85"></a><p class="footer-brand-desc">The enterprise cryptographic governance platform. Navigator is the system of record for cryptographic transformation.</p></div>
+    <div class="footer-col"><h6>Platform</h6><ul><li><a href="navigator.html">Navigator</a></li><li><a href="discovery.html">Discovery</a></li></ul></div>
+    <div class="footer-col"><h6>Applications</h6><ul><li><a href="cryptographic-inventory.html">Cryptographic Inventory &amp; CBOM</a></li><li><a href="post-quantum.html">Post-Quantum Transition</a></li><li><a href="grc.html">Cryptographic GRC</a></li></ul></div>
+    <div class="footer-col"><h6>Company</h6><ul><li><a href="partners.html">Partners</a></li><li><a href="contact.html">Contact</a></li><li><a href="https://navigator.cipherwyze.com">Sign in</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><div>© 2024 CipherWyze. All rights reserved.</div><a href="contact.html" class="btn btn-primary btn-sm">Request a Navigator demo</a></div>
+</footer>
+
+</div></div>
+<script>
+const burger = document.getElementById('nav-burger'); const mobileNav = document.getElementById('nav-mobile');
+burger.addEventListener('click', () => { burger.classList.toggle('open'); mobileNav.classList.toggle('open'); });
+const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); observer.unobserve(e.target); } }); }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+document.querySelectorAll('.aos').forEach(el => observer.observe(el));
+</script>
+</body></html>
