@@ -243,6 +243,14 @@ img { display: block; max-width: 100%; }
   border-color: var(--border-2);
 }
 .btn-outline:hover { background: var(--bg-section); border-color: var(--navy); }
+.cta-section .btn-outline {
+  color: #fff;
+  border-color: rgba(255,255,255,0.4);
+}
+.cta-section .btn-outline:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.7);
+}
 
 .btn-ghost {
   background: transparent;
