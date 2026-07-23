@@ -536,6 +536,119 @@ textarea.form-input { min-height: 140px; resize: vertical; }
 .cta-inner .s-label-line { background: #6EE7B7; }
 .cta-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 1rem; margin-top: 2rem; }
 
+/* ---------- CTA GLOW ---------- */
+.cta-glow {
+  position: absolute;
+  top: -80px; left: 50%;
+  transform: translateX(-50%);
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(27,111,78,0.14) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+/* ---------- EVIDENCE PIPELINE FLOW ---------- */
+.flow {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+.flow-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.625rem;
+  flex: 1;
+  min-width: 90px;
+  padding: 0.5rem;
+}
+.flow-icon {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.flow-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.2;
+}
+.flow-sub {
+  font-size: 0.75rem;
+  color: var(--text-3);
+  line-height: 1.4;
+}
+.flow-arrow {
+  font-size: 1.25rem;
+  color: var(--border-2);
+  flex-shrink: 0;
+  padding: 0 0.25rem;
+  user-select: none;
+}
+
+/* ---------- STEPS (operational controls) ---------- */
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+.step:last-child { border-bottom: none; }
+.step-circle {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: rgba(27,111,78,0.08);
+  border: 1px solid rgba(27,111,78,0.2);
+  color: var(--green);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.step-body h5 {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem;
+  color: var(--text);
+}
+.step-body p {
+  font-size: 0.875rem;
+  color: var(--text-2);
+  margin: 0;
+  line-height: 1.55;
+}
+
+/* ---------- BADGES ---------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  letter-spacing: 0.01em;
+}
+.badge-cyan    { background: rgba(6,200,232,0.1);   color: #0891B2; border: 1px solid rgba(6,200,232,0.25); }
+.badge-purple  { background: rgba(139,92,246,0.1);  color: #7C3AED; border: 1px solid rgba(139,92,246,0.25); }
+.badge-emerald { background: rgba(16,185,129,0.1);  color: #059669; border: 1px solid rgba(16,185,129,0.25); }
+.badge-navy    { background: rgba(15,26,46,0.08);   color: var(--navy); border: 1px solid rgba(15,26,46,0.15); }
+
+/* ---------- RESPONSIVE: FLOW + STEPS ---------- */
+@media (max-width: 860px) {
+  .flow { flex-wrap: wrap; justify-content: center; }
+  .flow-arrow { transform: rotate(90deg); }
+}
+
+
+
 /* ---------- FOOTER ---------- */
 .footer {
   background: var(--navy);
